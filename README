@@ -1,0 +1,23 @@
+# javabrowser
+
+A web application to explore the classes that are available on the
+application's classpath.
+
+## Usage
+
+### Start Web Server
+
+Run `(main)` to start a webserver on port 9000
+
+## Methods
+
+### find-classes
+
+`find-classes` builds a list of fully qualified names of classes and
+interfaces that are on the current classpath
+
+## License
+
+Copyright (C) 2011 Dave Paroulek (upgradingdave.com)
+
+Distributed under the Eclipse Public License, the same as Clojure.
