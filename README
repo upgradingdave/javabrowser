@@ -5,18 +5,66 @@ application's classpath.
 
 ## Usage
 
-### Start Web Server
+## Start Web Server
 
 Run `(main)` to start a webserver on port 9000
 
-## Methods
+# Features
 
-### find-classes
+## Find all jars on classpath
+
+API
+
+    (get-jars-on-classpath)
+
+REST
+
+    /rest/jars?search=.*
+
+## Search for jar by name
+
+API 
+
+    (search-jars <name>)
+
+REST
+
+    /rest/jars?search=<name>
+
+## Find all classes in a jar
+
+API
+
+    (get-classes-in-zip <path-to-jar>)
+
+REST (wip, need to finish)
+
+    /rest/jars?jar=<path-to-jar>
+
+## Find all classes on classpath
 
 `find-classes` builds a list of fully qualified names of classes and
 interfaces that are on the current classpath
 
-## License
+API 
+
+    find-classes
+
+REST 
+
+    /rest/search?search=.*
+
+## Search for class by name
+
+API 
+
+    (search-classes <class-name>)
+
+REST
+
+    /rest/search?search=<class-name>
+
+# License
 
 Copyright (C) 2011 Dave Paroulek (upgradingdave.com)
 

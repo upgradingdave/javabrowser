@@ -21,7 +21,7 @@ body
   font-size: 90%
   /* padding: 20px
   font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif
-  +grid-background
+  /*+grid-background
 
 h1
   color: #484848
@@ -31,10 +31,11 @@ h1
 .two-col
   /* The container mixin forces everything to be centered
   /*+container 
-  #sidebar 
+  #sidebar
+    height: 100%
+    padding-left: 10px    
     +column(8)
-      
-    background-color: #ccc
+    background-color: #fff
   #content 
     +column(16, true)
 
@@ -44,7 +45,7 @@ h1
 
 #searchbox
   padding: 5px  
-  background-color: #EEECD9  
+  background-color: #fff
 
 #refresh
   img
@@ -67,7 +68,10 @@ h1
   float: right
   display: none  
 
-/* Forms */
+/* Lists
+
+li 
+  padding: 2px
 
 
 

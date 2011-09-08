@@ -22,8 +22,7 @@
   (filter
    #(re-matches #".*\.jar" %)
    (concat (str/split (. System (getProperty "sun.boot.class.path")) #":")
-           (str/split (. System (getProperty "java.class.path")) #":")))
-  )
+           (str/split (. System (getProperty "java.class.path")) #":"))))
 
 (defn get-entries-in-zip
   [fileName]
@@ -42,6 +41,13 @@ map, it complains that z is closed"
   "Get list of class files inside jar file."
   [fileName]
   (filter #(re-matches #".*\.class" %) (get-entries-in-zip fileName)))
+
+(defn path-to-jar-name
+  "TODO: use path separator instead of \"/\". Convert path like
+  '/Users/dparoulek/code/clojure/javabrowser/lib/clj-json-0.4.0.jar'
+  to filename"
+  [filepath]
+  (apply str (drop (+ 1 (.. filepath (lastIndexOf "/"))) filepath)))
 
 (defn path-to-class-name
   [filepath]
@@ -66,6 +72,14 @@ qualified java class name"
         all-classes (filter #(re-seq (re-pattern (str "(?i)" search-term)) %) (find-classes))
         total (count all-classes)]
     (take max (drop offset all-classes))))
+
+(defn search-jars
+  [search-term & [offset max]]
+  (let [offset (or offset 0)
+        max (or max 20)
+        all-jars (filter #(re-seq (re-pattern (str "(?i)" search-term)) %) (get-jars-on-classpath))
+        total (count all-jars)]
+    (take max (drop offset all-jars))))
 
 ;; Get metadata about a Java Class
 (defn string-to-class
@@ -136,22 +150,19 @@ qualified java class name"
                          (seq (.getParameterTypes method))))))
 
 (defn display-java-methods
-  "Convert a collection of Methods into a html table"
+  "Display a collection of Methods as html"
   [coll]
-  (html [:table
-         [:thead
-          [:th "Modifiers"]
-          [:th "Return Type"]
-          [:th "Method Name"]
-          [:th "Params"]]
-         [:tbody
-          (map
-           #(html [:tr
-                   [:td (.. Modifier (toString (.getModifiers %)))]
-                   [:td (.. % getReturnType getName)]
-                   [:td (.. % getName)]
-                   [:td (get-param-types %)]])
-           coll)]]))
+  (html [:ul {:id "methods"}
+         (map  #(html [:li
+                       (.. Modifier (toString (.getModifiers %)))
+                       " "
+                       (.. % getReturnType getName)
+                       " "
+                       (.. % getName)
+                       "("
+                       (get-param-types %)
+                       ")"])
+               coll)]))
 
 ;; Web App Related stuff
 
@@ -183,7 +194,9 @@ qualified java class name"
 (defn parse-query-string
   "Convert QUERY-STRING string into map of key value pairs"
   [query-string]
-  (split-pairs-into-map (split-query-string-into-pairs query-string)))
+  (if (empty? query-string)
+    ""
+    (split-pairs-into-map (split-query-string-into-pairs query-string))))
 
 (defn json-response
   [data & [status]]
@@ -209,23 +222,33 @@ qualified java class name"
 (defn sidebar-html
   [& search]
   (html
+   [:div
+    [:a {:href "javascript:doSearch('.*');"} "classes"]
+    "|" [:a {:href "javascript:doJarSearch('.*');"} "jars"]]
    [:input {:id "searchbox" :type "text"}]
    [:div {:id "search-results"}]))
 
 (defn content-html
   "Render HTML for content section"
   [& [classname]]
-     (str (build-class-html classname)
-         (display-java-methods (get-java-methods classname))))
+  (str (build-class-html classname)
+       (html [:br])
+       (display-java-methods (get-java-methods classname))))
 
 (defroutes application-routes
-  (GET "/" [] (redirect "/methods?classname=java.lang.String"))
+  (GET "/" [] (redirect "/methods?classname=java.lang.Object"))
   (GET "/methods" request
        (let [classname (:classname (parse-query-string (:query-string request)))]
          (layout (sidebar-html) (content-html classname))))
   (GET "/rest/search" request
        (let [search-term (:search (parse-query-string (:query-string request)))]
          (json-response (search-classes search-term))))
+  (GET "/rest/jars" request
+       (let [search-term (:search (parse-query-string (:query-string request)))
+             jar-path (:jar (parse-query-string (:query-string request)))]
+         (cond
+          (not (empty? search-term)) (json-response (search-jars search-term))
+          (not (empty? jar-path)) (json-response (get-classes-in-zip jar-path)))))
   (GET "/request" request
        (html [:div (str request)]))
   (files "/")

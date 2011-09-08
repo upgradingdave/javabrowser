@@ -1,3 +1,5 @@
+var searchTypes = ["classes", "jars"];
+var searchType = searchTypes[0];
 
 var options = {};
 
@@ -18,7 +20,7 @@ function init(){
     if($('#searchbox').val()){
     	doSearch($('#searchbox').val());
     } else {
-    	doSearch();
+    	doSearch('.*');
     }
 }
 
@@ -29,7 +31,11 @@ function startTypingTimer(input_field) {
     }
     typingTimeout = setTimeout(
 	function(){
-	    doSearch($('#searchbox').val());
+            if(searchType == searchTypes[0]){
+	        doSearch($('#searchbox').val());
+            } else {
+	        doJarSearch($('#searchbox').val());                
+            }
 	}, 500);
 }
 
@@ -70,6 +76,8 @@ function ajaxRequest (opt_options) {
  * Do a search for java classes. 
  */
 function doSearch(search, onSuccess) {
+    searchType = searchTypes[0];
+    $('#searchbox').val(search);
     ajaxRequest(
 	{
 	    url: '/rest/search?search='+search,
@@ -80,12 +88,74 @@ function doSearch(search, onSuccess) {
 	});
 }
 
+/**
+ * Do a search for jars 
+ */
+function doJarSearch(search, onSuccess) {
+    searchType = searchTypes[1];
+    $('#searchbox').val(search);
+    ajaxRequest(
+	{
+	    url: '/rest/jars?search='+search,
+	    success: onSuccess ? function(response) {onSuccesseval(response);} : 
+		function(response){
+                    showJarSearchResults(response);
+		}
+	});
+}
+
+/**
+ * Get all classes in a jar
+ */
+function getClassesInJar(path_to_jar, onSuccess) {
+    searchType = searchTypes[0];
+    $('#searchbox').val('');
+    ajaxRequest(
+	{
+	    url: '/rest/jars?jar='+path_to_jar,
+	    success: onSuccess ? function(response) {onSuccesseval(response);} : 
+		function(response){
+                    showSearchResults(response);
+		}
+	});
+}
+
 function showSearchResults(json){
     var html = "<ul>";
     for(i in json){
-        html += '<li><a href=\"/methods?classname='+json[i]+'\">'+json[i]+'</a></li>';
+        html += '<li><a href=\"/methods?classname='+json[i]+'\" '
+            + 'alt="'+json[i]+'">'
+            +truncString(json[i], 30)
+            +'</a></li>';
     }
     html += "</ul>";
 
     $('#search-results').html(html);
+}
+
+function showJarSearchResults(json){
+    var html = "<ul>";
+    for(i in json){
+        html += '<li><a href="javascript:getClassesInJar(\''+json[i]+'\')" '
+            + 'alt="'+json[i]+'">'
+            + truncString(getFileName(json[i]), 30)
+            +'</a></li>';
+    }
+    html += "</ul>";
+
+    $('#search-results').html(html);
+}
+
+function truncString(str, max_length){
+    var max = max_length || 10;
+    var result = str.length > max ? str.substring(0, max-3) + "..." : str;
+    return result;
+}
+
+/**
+ * TODO: find os dependent path separator somehow
+ * Given file path return file name
+ */
+function getFileName(filepath){
+    return filepath.slice((1 + filepath.lastIndexOf("/")),filepath.length);
 }
