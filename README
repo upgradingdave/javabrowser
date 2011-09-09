@@ -3,11 +3,21 @@
 A web application to explore the classes that are available on the
 application's classpath.
 
+Note: I'm very new to Clojure and am using this project to help me
+learn.
+
 ## Usage
 
-## Start Web Server
+## Start Compojure Web Server
 
-Run `(main)` to start a webserver on port 9000
+From Clojure, run `(main)` or from Java, run `startServer()` to start
+a webserver on port 9000
+
+## Ruby Serve Project
+
+This is also a Serve project just for convenience of having compass,
+sass and haml available. Run `serve` at the command line and then
+browse to port 4000.
 
 # Features
 

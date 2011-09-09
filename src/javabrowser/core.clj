@@ -1,4 +1,9 @@
 (ns javabrowser.core
+  (:gen-class
+   :init init
+   :name javabrowser.JavaBrowser
+   :methods [[simple [] String]
+             [startServer [] void]])
   (:use [ring.adapter.jetty :only (run-jetty)]
         [ring.util.response :only (redirect)]
         [compojure.core :only (defroutes GET)]
@@ -43,11 +48,13 @@ map, it complains that z is closed"
   (filter #(re-matches #".*\.class" %) (get-entries-in-zip fileName)))
 
 (defn path-to-jar-name
-  "TODO: use path separator instead of \"/\". Convert path like
+  "Convert path like
   '/Users/dparoulek/code/clojure/javabrowser/lib/clj-json-0.4.0.jar'
   to filename"
   [filepath]
-  (apply str (drop (+ 1 (.. filepath (lastIndexOf "/"))) filepath)))
+  (apply str
+   (drop (+ 1 (.. filepath (lastIndexOf
+                            (. java.io.File separator)))) filepath)))
 
 (defn path-to-class-name
   [filepath]
@@ -254,8 +261,19 @@ qualified java class name"
   (files "/")
   (not-found "<h1>Not Found</h1>"))
 
-(defn main []
+(defn main
+  []
   (run-jetty (var application-routes) {:port 9000 :join? false})
   (println "Javabrowser started successfully. Browse to http://localhost:9000 to get started!"))
 
+;; Java interop stuff
+(defn -init [] [[] (atom [])])
+
+(defn -simple
+  [this]
+  "Hello from clojure")
+
+(defn -startServer [this]
+  (main)
+)
 

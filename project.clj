@@ -1,6 +1,6 @@
 (defproject javabrowser "1.0.0-SNAPSHOT"
   :description "Web app to browse java objects avialable on classpath"
-    :dependencies [[org.clojure/clojure "1.3.0-beta1"]
+  :dependencies [[org.clojure/clojure "1.3.0-beta1"]
                  [org.clojure/tools.logging "0.1.2"]
                  [org.clojure/data.json "0.1.0"]
                  [ring/ring-jetty-adapter "0.3.11"
@@ -16,4 +16,6 @@
                                               com.sun.jmx/jmxri]]
                  [swank-clojure "1.3.0" :exclusions [org.clojure/clojure]]
                  [jline "0.9.94"]]
-    :dev-dependencies [[swank-clojure "1.3.0" :exclusions [org.clojure/clojure]]])
+  :aot [javabrowser.core]
+  :main javabrowser.core
+  )

@@ -1,3 +1,10 @@
 /.sass-cache/
 /lib/
 
+/.classpath
+/.project
+/.settings/
+/classes/
+/javabrowser-1.0.0-SNAPSHOT.jar
+/target/
+/target/classes/main/java/Runner.class
