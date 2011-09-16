@@ -1,5 +1,5 @@
-(defproject javabrowser "1.0.0-SNAPSHOT"
-  :description "Web app to browse java objects avialable on classpath"
+(defproject com.upgradingdave/javabrowser "0.0.1"
+  :description "Web app to browse java classes avialable on classpath"
   :dependencies [[org.clojure/clojure "1.3.0-beta1"]
                  [org.clojure/tools.logging "0.1.2"]
                  [org.clojure/data.json "0.1.0"]
@@ -16,6 +16,6 @@
                                               com.sun.jmx/jmxri]]
                  [swank-clojure "1.3.0" :exclusions [org.clojure/clojure]]
                  [jline "0.9.94"]]
-  :aot [javabrowser.core]
-  :main javabrowser.core
+  :dev-dependencies [[lein-ring "0.4.5"]]
+  :ring {:handler javabrowser.core/app}
   )

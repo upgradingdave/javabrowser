@@ -6,12 +6,14 @@
              [startServer [] void]])
   (:use [ring.adapter.jetty :only (run-jetty)]
         [ring.util.response :only (redirect)]
-        [compojure.core :only (defroutes GET)]
+        [compojure.core]
         [hiccup.core :only (html)]
         [hiccup.page-helpers :only (include-css include-js)]
-        [compojure.route]
         [ring.middleware.json-params])
-  (:require [clojure.string :as str]
+  (:require [compojure.route :as route]
+            [compojure.handler :as handler]
+            [compojure.response :as response]
+            [clojure.string :as str]
             [clj-json.core :as json])
   (:import (java.net URLEncoder)
            (java.lang.reflect Modifier)
@@ -156,6 +158,20 @@ qualified java class name"
                     (map #(format "%s" %)
                          (seq (.getParameterTypes method))))))
 
+(defn get-java-constructors
+  "Get a collection of all the constructors of CLASSNAME (string)"
+  [classname]
+  (try
+    (seq (.. Class (forName classname) (getConstructors)))
+    (catch ClassNotFoundException _ nil)))
+
+(defn get-java-declared-constructors
+  "Get a collection of all the constructors of CLASSNAME (string)"
+  [classname]
+  (try
+    (seq (.. Class (forName classname) (getDeclaredConstructors)))
+    (catch ClassNotFoundException _ nil)))
+
 (defn display-java-methods
   "Display a collection of Methods as html"
   [coll]
@@ -258,13 +274,15 @@ qualified java class name"
           (not (empty? jar-path)) (json-response (get-classes-in-zip jar-path)))))
   (GET "/request" request
        (html [:div (str request)]))
-  (files "/")
-  (not-found "<h1>Not Found</h1>"))
+  (route/resources "/")
+  (route/not-found "<h1>Not Found</h1>"))
 
 (defn main
   []
   (run-jetty (var application-routes) {:port 9000 :join? false})
   (println "Javabrowser started successfully. Browse to http://localhost:9000 to get started!"))
+
+(defn handler [request])
 
 ;; Java interop stuff
 (defn -init [] [[] (atom [])])
@@ -275,5 +293,8 @@ qualified java class name"
 
 (defn -startServer [this]
   (main)
-)
+  )
+
+(def app
+  (-> (handler/site application-routes)))
 

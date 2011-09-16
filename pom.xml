@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>javabrowser</groupId>
+  <groupId>com.upgradingdave</groupId>
   <artifactId>javabrowser</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>0.0.1</version>
   <name>javabrowser</name>
-  <description>Web app to browse java objects avialable on classpath</description>
+  <description>Web app to browse java classes avialable on classpath</description>
   <scm>
-    <tag>5d0b1ae53fbf9bfddf54625a3579fe8f94f0e075</tag>
+    <tag>1d8ca2fc1d8420dd2f1523477543279339f6d54b</tag>
   </scm>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -34,18 +34,6 @@
     </repository>
   </repositories>
   <dependencies>
-    <dependency>
-      <groupId>swank-clojure</groupId>
-      <artifactId>swank-clojure</artifactId>
-      <version>1.3.0</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>clojure</artifactId>
-          <groupId>org.clojure</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
@@ -146,6 +134,16 @@
       <groupId>jline</groupId>
       <artifactId>jline</artifactId>
       <version>0.9.94</version>
+    </dependency>
+    <dependency>
+      <groupId>lein-ring</groupId>
+      <artifactId>lein-ring</artifactId>
+      <version>0.4.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty</artifactId>
+      <version>6.1.26</version>
     </dependency>
   </dependencies>
 </project>
