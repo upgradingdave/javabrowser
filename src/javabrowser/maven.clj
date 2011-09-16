@@ -1,31 +1,42 @@
 (ns javabrowser.maven
-  (:use [ring.middleware.json-params])
-  (:require [clojure.string :as str])
-  (:import (org.apache.maven.artifact.repository DefaultArtifactRepository)
-           (org.codehaus.classworlds ClassWorld)
-           (java.io File)
-           (org.codehaus.plexus.embed Embedder)))
+  (:use [javabrowser.filesystem])
+  (:require [clojure.xml :as xml]
+            [clojure.zip :as zip]
+            [clojure.contrib.zip-filter.xml :as zf])
+  (:import (java.io File)))
 
-(defn pom-in-dir?
-  [filepath]
-  (not (empty? (filter #(re-find #"pom.xml" %) (.. (clojure.java.io/file filepath) list)))))
+(defn local-repo-path
+  "Return path to local repo"
+  []
+  (str (. System (getProperty "user.home")) "/.m2/repository"))
+
+(defn find-pom
+  "Search up the file system directory path for a pom.xml. Returns
+  full path to pom.xml"
+  ([] (find-pom "."))
+  ([dirpath]
+     (find-file dirpath "pom.xml")))
+
+(defn mavenized?
+  "returns true if we can find a pom.xml"
+  ([] (mavenized? "."))
+  ([dirpath]
+      (if (find-pom dirpath) true false)))
+
 
 (defn get-dependencies
-  "Gets a list of maven dependencies for the current project"
-  [pom-file]
-  ;; create plexus container
-  (let [classworld (ClassWorld. "plexus.core"
-                                (.. Thread (currentThread) (getContextClassLoader)))
-        emedder (Embedder.)
-        pomFile (File. "pom.xml")])
-    (import 'org.apache.maven.project.DefaultProjectBuilderConfiguration)
-    (def pomConfig (DefaultProjectBuilderConfiguration.))
-    (import 'org.apache.maven.project.DefaultMavenProjectBuilder)
-    (def projBuilder (DefaultMavenProjectBuilder.))
-    (.. projBuilder (initialize))
-    set local artifact repository
-    then build
+  "Parse pom.xml and build list of jar dependencies"
+  []
+  (let [zipper (zip/xml-zip (xml/parse (find-pom)))]
+    (map (fn [group artifact version]
+           (str (local-repo-path) "/"
+                (.. group (replace "." java.io.File/separator)) "/" artifact
+                "/" version "/" artifact "-" version ".jar"))
+         (zf/xml-> zipper :dependencies :dependency :groupId zf/text)
+         (zf/xml-> zipper :dependencies :dependency :artifactId zf/text)
+         (zf/xml-> zipper :dependencies :dependency :version zf/text))))
 
-  
-)
+
+
+
 

@@ -1,17 +1,22 @@
 # javabrowser
 
-A web application to explore the classes that are available on the
-application's classpath.
+A web application to explore the classes that are available to a java
+project
 
-Note: I'm very new to Clojure and am using this project to help me
-learn.
+If the webapp is started from within a directory that is a maven
+project, it will use the pom to find jar dependencies. 
+
+Otherwise, it checks which jars are in the classpath (which really
+isn't useful because it will only find jars inside the webapp
+classpath)
+
+I'm just learning Clojure, so I'm sure the code is a mess. 
 
 ## Usage
 
 ## Start Compojure Web Server
 
-From Clojure, run `(main)` or from Java, run `startServer()` to start
-a webserver on port 9000
+    lein ring server
 
 ## Ruby Serve Project
 
