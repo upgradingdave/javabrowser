@@ -1,32 +1,75 @@
-# javabrowser
+This is a web project that I'm using to learn Clojure (and
+Clojurescript!), so I'm sure this code is pretty ugly.
 
-A web application to explore the classes that are available to a java
-project
+This is a web application to explore the classes that are available to
+a java project.
 
 If the webapp is started from within a directory that is a maven
 project, it will use the pom to find jar dependencies. 
 
-Otherwise, it checks which jars are in the classpath (which really
-isn't useful because it will only find jars inside the webapp
-classpath)
+Otherwise, it checks which jars are in this webapp's classpath (which
+really isn't very useful because it will only find the jars that are
+required to run itself classpath)
 
-I'm just learning Clojure, so I'm sure the code is a mess. 
+# Directory Layout
 
-## Usage
+* src/main/clj 
+
+Contains clojure serve side code 
+
+* src/main/cljs
+
+Contains clojurescript client side stuff
+
+* stylesheets
+
+Contains the sass stylesheets. These are automatically converted to
+css files inside resources/public/stylesheets
+
+* resources/public 
+
+Static resources that are all bundled up and included in the
+war. Stylesheets are generated from `stylesheets` sass
+files. Javascript is generated from `src/main/cljs`. Html is generated
+by exporting serve haml views. 
+
+* src/main/resources
+
+Stuff used by clojure server side code
+
+* src/test/resources
+
+Stuff used by clojure server unit tests
+
+* src/test/clj 
+
+# Server
 
 ## Start Compojure Web Server
 
     lein ring server
 
-## Ruby Serve Project
+## Run Unit tests
 
-This is also a Serve project just for convenience of having compass,
-sass and haml available. Run `serve` at the command line and then
-browse to port 4000.
+    lein test
 
-# Features
+## Start a Clojure REPL
 
-## Find all jars on classpath
+In Emacs: 
+
+    lein swank
+
+Then, in emacs: 
+
+    slime-connect
+
+Outside of Emacs (but why?!!!): 
+
+    lein repl
+
+## Server Features
+
+### Find all jars on classpath
 
 API
 
@@ -36,7 +79,7 @@ REST
 
     /rest/jars?search=.*
 
-## Search for jar by name
+### Search for jar by name
 
 API 
 
@@ -46,7 +89,7 @@ REST
 
     /rest/jars?search=<name>
 
-## Find all classes in a jar
+### Find all classes in a jar
 
 API
 
@@ -56,7 +99,7 @@ REST (wip, need to finish)
 
     /rest/jars?jar=<path-to-jar>
 
-## Find all classes on classpath
+### Find all classes on classpath
 
 `find-classes` builds a list of fully qualified names of classes and
 interfaces that are on the current classpath
@@ -69,7 +112,7 @@ REST
 
     /rest/search?search=.*
 
-## Search for class by name
+### Search for class by name
 
 API 
 
@@ -78,6 +121,43 @@ API
 REST
 
     /rest/search?search=<class-name>
+
+# Front End (Clojurescript, Sass, Haml)
+
+I'm using a few technologies here including Clojurescript, and a ruby
+gem called "Serve" (that uses haml, and sass).
+
+## Ruby Serve Project
+
+This is also a Serve project just for convenience of having compass,
+sass and haml available. Run `serve` at the command line and then
+browse to port 4000.
+
+Use `serve export . resources/public`, then rename haml files to
+html. 
+
+## Clojurescript
+
+Start a clojure repl then do the following to compile cljs to
+javascript.
+
+    (use 'cljs.closure)
+    (def opts {:output-to "resources/public/javascripts/javabrowser.js" :output-dir "resources/public/javascripts/out"})
+    (build "src/main/cljs" opts)
+
+The haml files can then use the the js. You can also play around with
+cljs files inside a cljs browser repl (use browser-repl shell script,
+or, in emacs, call inferior-lisp with it set to use browser-repl).
+
+# RoadMap
+
+## Version 0.0.3 (in progress)
+
+* Replace jquery with clojurescript!
+* Add basic javascript and layout stuff to my generic serve project
+* Finish display of class in main screen
+* Able to browse thru jars in upper left of screen
+* Able to browse thru all classes in lower left
 
 # License
 

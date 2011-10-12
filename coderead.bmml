@@ -1,0 +1,27 @@
+<mockup version="1.0" skin="sketch" measuredW="1021" measuredH="1095" mockupW="859" mockupH="1067">
+  <controls>
+    <control controlID="2" controlTypeID="__group__" x="370" y="55" w="-1" h="-1" measuredW="641" measuredH="1030" zOrder="0" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="572" h="888" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="2"/>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Paragraph" x="0" y="9" w="641" h="1021" measuredW="200" measuredH="140" zOrder="1" locked="false" isInGroup="2">
+          <controlProperties>
+            <text>%20%20@Override%0A%20%20protected%20void%20startClient%28%29%20%7B%0A%20%20%20%20LazyCommandExecutor%20exe%20%3D%20%28LazyCommandExecutor%29%20getCommandExecutor%28%29%3B%0A%20%20%20%20FirefoxProfile%20profileToUse%20%3D%20getProfile%28exe.profile%29%3B%0A%20%20%20%20profileToUse.addWebDriverExtensionIfNeeded%28%29%3B%0A%0A%20%20%20%20//%20TODO%28simon%29%3A%20Make%20this%20not%20sinfully%20ugly%0A%20%20%20%20ExtensionConnection%20connection%20%3D%20connectTo%28exe.binary%2C%20profileToUse%2C%20%22localhost%22%29%3B%0A%20%20%20%20exe.setConnection%28connection%29%3B%0A%0A%20%20%20%20try%20%7B%0A%20%20%20%20%20%20connection.start%28%29%3B%0A%20%20%20%20%7D%20catch%20%28IOException%20e%29%20%7B%0A%20%20%20%20%20%20throw%20new%20WebDriverException%28%22An%20error%20occurred%20while%20connecting%20to%20Firefox%22%2C%20e%29%3B%0A%20%20%20%20%7D%0A%20%20%7D%0A%0A%20%20private%20FirefoxProfile%20getProfile%28FirefoxProfile%20profile%29%20%7B%0A%20%20%20%20FirefoxProfile%20profileToUse%20%3D%20profile%3B%0A%20%20%20%20String%20suggestedProfile%20%3D%20System.getProperty%28%22webdriver.firefox.profile%22%29%3B%0A%20%20%20%20if%20%28profileToUse%20%3D%3D%20null%20%26%26%20suggestedProfile%20%21%3D%20null%29%20%7B%0A%20%20%20%20%20%20profileToUse%20%3D%20new%20ProfilesIni%28%29.getProfile%28suggestedProfile%29%3B%0A%20%20%20%20%20%20if%20%28profileToUse%20%3D%3D%20null%29%20%7B%0A%20%20%20%20%20%20%20%20throw%20new%20WebDriverException%28%22Firefox%20profile%20%27%22%20+%20suggestedProfile%0A%20%20%20%20%20%20%20%20%20%20%20%20+%20%22%27%20named%20in%20system%20property%20%27webdriver.firefox.profile%27%20not%20found%22%29%3B%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%20else%20if%20%28profileToUse%20%3D%3D%20null%29%20%7B%0A%20%20%20%20%20%20profileToUse%20%3D%20new%20FirefoxProfile%28%29%3B%0A%20%20%20%20%7D%0A%20%20%20%20return%20profileToUse%3B%0A%20%20%7D%0A%0A%20%20protected%20ExtensionConnection%20connectTo%28FirefoxBinary%20binary%2C%20FirefoxProfile%20profile%2C%0A%20%20%20%20%20%20String%20host%29%20%7B%0A%20%20%20%20Lock%20lock%20%3D%20obtainLock%28%29%3B%0A%20%20%20%20try%20%7B%0A%20%20%20%20%20%20FirefoxBinary%20bin%20%3D%20binary%20%3D%3D%20null%20%3F%20new%20FirefoxBinary%28%29%20%3A%20binary%3B%0A%0A%20%20%20%20%20%20return%20new%20NewProfileExtensionConnection%28lock%2C%20bin%2C%20profile%2C%20host%29%3B%0A%20%20%20%20%7D%20catch%20%28Exception%20e%29%20%7B%0A%20%20%20%20%20%20throw%20new%20WebDriverException%28e%29%3B%0A%20%20%20%20%7D%20finally%20%7B%0A%20%20%20%20%20%20lock.unlock%28%29%3B%0A%20%20%20%20%7D%0A%20%20%7D</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::SubTitle" x="370" y="18" w="-1" h="-1" measuredW="454" measuredH="37" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>org.openqa.selenium.firefox.FirefoxDriver</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Arrow" x="152" y="40" w="-1" h="-1" measuredW="150" measuredH="100" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <curvature>1</curvature>
+        <direction>top</direction>
+        <rightArrow>true</rightArrow>
+        <text/>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

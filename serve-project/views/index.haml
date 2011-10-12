@@ -1,0 +1,436 @@
+#sidebar
+  #jars
+    .searchbox
+      %input{:type => 'text'}
+    %ul.list
+      %li.jar-name
+        %a{:href => "#"}
+          jdk.jar
+      %li.jar-name
+        %a{:href => "#"}
+          log4j.jar
+      %li.jar-name
+        %a{:href => "#"}
+          clojure.jar
+      %li.jar-name
+        %a{:href => "#"}
+          common-lang.jar
+  #packages-list
+    .searchbox
+      %input{:type => 'text'}
+    .list
+      %a.package-name{:href => "#"}
+        org.apache.commons.lang3
+      %a.package-name.selected{:href => "#"}
+        org.apache.commons.lang3.builder
+      %a.package-name{:href => "#"}
+        org.apache.commons.lang3.concurrent
+      %a.package-name{:href => "#"}
+        org.apache.commons.lang3.event
+      %a.package-name{:href => "#"}
+        org.apache.commons.lang3.exception
+      %a.package-name{:href => "#"}
+        org.apache.commons.lang3.math
+      %a.package-name{:href => "#"}
+        org.apache.commons.lang3.mutable
+      %a.package-name{:href => "#"}
+        org.apache.commons.lang3.reflect
+      %a.package-name{:href => "#"}
+        org.apache.commons.lang3.text
+      %a.package-name{:href => "#"}
+        org.apache.commons.lang3.text.translate
+      %a.package-name{:href => "#"}
+        org.apache.commons.lang3.time
+  #classes-list
+    .searchbox
+      %input{:type => 'text'}
+    .list
+      .class-name
+        AggregateTranslator
+      .class-name
+        AnnotationUtils
+      .class-name
+        ArrayUtils
+      .class-name
+        AtomicInitializer
+      .class-name
+        AtomicSafeInitializer
+      .class-name
+        BackgroundInitializer
+      .class-name
+        BasicThreadFactory
+      .class-name
+        BasicThreadFactory.Builder
+      .class-name
+        BitField
+      .class-name
+        BooleanUtils
+      .class-name
+        Builder
+      .class-name
+        CallableBackgroundInitializer
+      .class-name
+        CharEncoding
+      .class-name
+        CharSequenceTranslator
+      .class-name
+        CharSequenceUtils
+      .class-name
+        CharSet
+      .class-name
+        CharSetUtils
+      .class-name
+        CharUtils
+      .class-name
+        ClassUtils
+      .class-name
+        CloneFailedException
+      .class-name
+        CodePointTranslator
+      .class-name
+        CompareToBuilder
+      .class-name
+        CompositeFormat
+      .class-name
+        ConcurrentException
+      .class-name
+        ConcurrentInitializer
+      .class-name
+        ConcurrentRuntimeException
+      .class-name
+        ConcurrentUtils
+      .class-name
+        ConstantInitializer
+      .class-name
+        ConstructorUtils
+      .class-name
+        ContextedException
+      .class-name
+        ContextedRuntimeException
+      .class-name
+        DateFormatUtils
+      .class-name
+        DateUtils
+      .class-name
+        DefaultExceptionContext
+      .class-name
+        DurationFormatUtils
+      .class-name
+        EntityArrays
+      .class-name
+        EnumUtils
+      .class-name
+        EqualsBuilder
+      .class-name
+        EventListenerSupport
+      .class-name
+        EventUtils
+      .class-name
+        ExceptionContext
+      .class-name
+        ExceptionUtils
+      .class-name
+        ExtendedMessageFormat
+      .class-name
+        FastDateFormat
+      .class-name
+        FieldUtils
+      .class-name
+        FormatFactory
+      .class-name
+        FormattableUtils
+      .class-name
+        Fraction
+      .class-name
+        HashCodeBuilder
+      .class-name
+        IEEE754rUtils
+      .class-name
+        ImmutablePair
+      .class-name
+        JavaVersion
+      .class-name
+        LazyInitializer
+      .class-name
+        LocaleUtils
+      .class-name
+        LookupTranslator
+      .class-name
+        MethodUtils
+      .class-name
+        MultiBackgroundInitializer
+      .class-name
+        MultiBackgroundInitializer.MultiBackgroundInitializerResults
+      .class-name
+        Mutable
+      .class-name
+        MutableBoolean
+      .class-name
+        MutableByte
+      .class-name
+        MutableDouble
+      .class-name
+        MutableFloat
+      .class-name
+        MutableInt
+      .class-name
+        MutableLong
+      .class-name
+        MutableObject
+      .class-name
+        MutablePair
+      .class-name
+        MutableShort
+      .class-name
+        NumberUtils
+      .class-name
+        NumericEntityEscaper
+      .class-name
+        NumericEntityUnescaper
+      .class-name
+        NumericEntityUnescaper.OPTION
+      .class-name
+        ObjectUtils
+      .class-name
+        ObjectUtils.Null
+      .class-name
+        OctalUnescaper
+      .class-name
+        Pair
+      .class-name
+        RandomStringUtils
+      .class-name
+        Range
+      .class-name
+        ReflectionToStringBuilder
+      .class-name
+        SerializationException
+      .class-name
+        SerializationUtils
+      .class-name
+        StandardToStringStyle
+      .class-name
+        StopWatch
+      .class-name
+        StrBuilder
+      .class-name
+        StringEscapeUtils
+      .class-name
+        StringUtils
+      .class-name
+        StrLookup
+      .class-name
+        StrMatcher
+      .class-name
+        StrSubstitutor
+      .class-name
+        StrTokenizer
+      .class-name
+        SystemUtils
+      .class-name
+        TimedSemaphore
+      .class-name
+        ToStringBuilder
+      .class-name
+        ToStringStyle
+      .class-name
+        TypeUtils
+      .class-name
+        UnicodeEscaper
+      .class-name
+        UnicodeUnescaper
+      .class-name
+        Validate
+      .class-name
+        WordUtils
+#content
+  #class-overview
+    #package-name
+      java.lang
+
+    #short-class-name
+      String
+
+    #class-hierarchy  
+      .parent-class
+        java.lang.Object
+      #full-class-name  
+        \--> java.lang.String
+    
+  #class-details
+    #class-def
+      public final class String 
+    #class-extends
+      extends Object 
+    #class-implements
+      implements Serializable, CharSequence, Comparable<String>
+
+
+  #class-constructors
+    %h1 
+      Constructors
+    .constructor
+      String()
+    .constructor  
+      String(byte[] bytes)
+    .constructor  
+      String(byte[] bytes, Charset charset)
+    .constructor  
+      String(byte[] ascii, int hibyte)
+    .constructor  
+      String(byte[] bytes, int offset, int length)
+    .constructor  
+      String(byte[] bytes, int offset, int length, Charset charset)
+    .constructor  
+      String(byte[] ascii, int hibyte, int offset, int count)
+    .constructor  
+      String(byte[] bytes, int offset, int length, String charsetName)
+    .constructor  
+      String(byte[] bytes, String charsetName)
+    .constructor  
+      String(char[] value)
+    .constructor  
+      String(char[] value, int offset, int count)
+    .constructor  
+      String(int[] codePoints, int offset, int count)
+    .constructor  
+      String(String original)
+    .constructor  
+      String(StringBuffer buffer)
+    .constructor  
+      String(StringBuilder builder)
+      
+  #class-methods
+    %h1
+      Methods
+    .method
+      char 	charAt(int index)
+    .method  
+      int 	codePointAt(int index)
+    .method  
+      int 	codePointBefore(int index)
+    .method  
+      int 	codePointCount(int beginIndex, int endIndex)
+    .method  
+      int 	compareTo(String anotherString)
+    .method  
+      int 	compareToIgnoreCase(String str)
+    .method  
+      String 	concat(String str)
+    .method  
+      boolean 	contains(CharSequence s)
+    .method  
+      boolean 	contentEquals(CharSequence cs)
+    .method  
+      boolean 	contentEquals(StringBuffer sb)
+    .method  
+      static String 	copyValueOf(char[] data)
+    .method  
+      static String 	copyValueOf(char[] data, int offset, int count)
+    .method  
+      boolean 	endsWith(String suffix)
+    .method  
+      boolean 	equals(Object anObject)
+    .method  
+      boolean 	equalsIgnoreCase(String anotherString)
+    .method  
+      static String 	format(Locale l, String format, Object... args)
+    .method  
+      static String 	format(String format, Object... args)
+    .method  
+      byte[] 	getBytes()
+    .method  
+      byte[] 	getBytes(Charset charset)
+    .method  
+      void 	getBytes(int srcBegin, int srcEnd, byte[] dst, int dstBegin)
+    .method  
+      byte[] 	getBytes(String charsetName)
+    .method  
+      void 	getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin)
+    .method  
+      int 	hashCode()
+    .method  
+      int 	indexOf(int ch)
+    .method  
+      int 	indexOf(int ch, int fromIndex)
+    .method  
+      int 	indexOf(String str)
+    .method  
+      int 	indexOf(String str, int fromIndex)
+    .method  
+      String 	intern()
+    .method  
+      boolean 	isEmpty()
+    .method  
+      int 	lastIndexOf(int ch)
+    .method  
+      int 	lastIndexOf(int ch, int fromIndex)
+    .method  
+      int 	lastIndexOf(String str)
+    .method  
+      int 	lastIndexOf(String str, int fromIndex)
+    .method  
+      int 	length()
+    .method  
+      boolean 	matches(String regex)
+    .method  
+      int 	offsetByCodePoints(int index, int codePointOffset)
+    .method  
+    .method  
+      Tests if two string regions are equal.
+    .method  
+      Tests if two string regions are equal.
+    .method  
+    .method  
+      String 	replace(CharSequence target, CharSequence replacement)
+    .method  
+      String 	replaceAll(String regex, String replacement)
+    .method  
+      String 	replaceFirst(String regex, String replacement)
+    .method  
+      String[] 	split(String regex)
+    .method  
+      String[] 	split(String regex, int limit)
+    .method  
+      boolean 	startsWith(String prefix)
+    .method  
+      boolean 	startsWith(String prefix, int toffset)
+    .method  
+      CharSequence 	subSequence(int beginIndex, int endIndex)
+    .method  
+      String 	substring(int beginIndex)
+    .method  
+      String 	substring(int beginIndex, int endIndex)
+    .method  
+      char[] 	toCharArray()
+    .method  
+      String 	toLowerCase()
+    .method  
+      String 	toLowerCase(Locale locale)
+    .method  
+      String 	toString()
+    .method  
+      String 	toUpperCase()
+    .method  
+      String 	toUpperCase(Locale locale)
+    .method  
+      String 	trim()
+    .method  
+      static String 	valueOf(boolean b)
+    .method  
+      static String 	valueOf(char c)
+    .method  
+      static String 	valueOf(char[] data)
+    .method  
+      static String 	valueOf(char[] data, int offset, int count)
+    .method  
+      static String 	valueOf(double d)
+    .method  
+      static String 	valueOf(float f)
+    .method  
+      static String 	valueOf(int i)
+    .method  
+      static String 	valueOf(long l)
+    .method  
+      static String 	valueOf(Object obj)
+      

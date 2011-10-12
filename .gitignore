@@ -16,3 +16,9 @@
 /maven-plugin/.settings/org.eclipse.jdt.core.prefs
 /maven-plugin/.settings/org.maven.ide.eclipse.prefs
 /maven-plugin/target/
+/.lein-failures
+/.repl/*
+/resources/*
+/serve-project/.sass-cache/*
+/serve-project/stylesheets/.sass-cache/*
+/serve-project/public/*

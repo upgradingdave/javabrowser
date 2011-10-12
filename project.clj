@@ -1,6 +1,6 @@
 (defproject com.upgradingdave/javabrowser "0.0.2"
   :description "Web app to browse java code"
-  :dependencies [[org.clojure/clojure "1.3.0-beta1"]
+  :dependencies [[org.clojure/clojure "1.3.0"]
                  [org.clojure/tools.logging "0.1.2"]
                  [org.clojure/data.json "0.1.0"]
                  [ring/ring-jetty-adapter "0.3.11"
@@ -14,8 +14,11 @@
                  [log4j "1.2.16" :exclusions [javax.mail/mail
                                               javax.jms/jms
                                               com.sun.jdmk/jmxtools
-                                              com.sun.jmx/jmxri]]
-                 [swank-clojure "1.3.0" :exclusions [org.clojure/clojure]]
-                 [jline "0.9.94"]]
+                                              com.sun.jmx/jmxri]]]
   :dev-dependencies [[lein-ring "0.4.5"]]
+  :source-path "src/main/clj"
+  :test-path "src/test/clj"
+  :extra-classpath-dirs ["src/main/cljs" "/Users/dparoulek/src/clojure/clojurescript/src/clj" "/Users/dparoulek/src/clojure/clojurescript/src/cljs" "/Users/dparoulek/src/clojure/clojurescript/lib/goog.jar" "/Users/dparoulek/src/clojure/clojurescript/lib/compiler.jar"]
+  :resources-path "src/main/resources"
+  :dev-resources-path "src/test/resources"
   :ring {:handler javabrowser.web/app})

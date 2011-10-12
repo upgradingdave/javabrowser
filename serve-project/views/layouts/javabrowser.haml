@@ -1,0 +1,17 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}
+    %title
+      = @title
+    %link{:rel => "stylesheet", :href => "/stylesheets/application.css"}
+  %body
+    .two-col
+      = yield
+
+    %script{:type => "text/javascript", :src => "/javascripts/closure/closure/goog/base.js"}
+    %script{:type => "text/javascript", :src => "/javascripts/closure/third_party/closure/goog/deps.js"}
+    %script{:type => "text/javascript", :src => "/javascripts/javabrowser.js"}
+    %script{:type => "text/javascript"}
+      goog.require('javabrowser.repl');
+      goog.require('goog.dom.query');
