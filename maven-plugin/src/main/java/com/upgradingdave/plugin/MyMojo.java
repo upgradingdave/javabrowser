@@ -102,23 +102,25 @@ public class MyMojo extends AbstractMojo {
 		}
 	}
 
-	public void runWithJetty() throws Exception {
-		Server server = new Server();
+    public void runWithJetty() throws Exception {
+        int port = Integer.getInteger("jetty.port", 9000).intValue();
+        Server server = new Server();
 
-		Connector connector = new SelectChannelConnector();
-		connector.setPort(Integer.getInteger("jetty.port", 8080).intValue());
-		server.setConnectors(new Connector[] { connector });
+        Connector connector = new SelectChannelConnector();
+        connector.setPort(port);
+        server.setConnectors(new Connector[] { connector });
 
-		WebAppContext webapp = new WebAppContext();
-		webapp.setContextPath("/");
-		webapp.setWar("target/javabrowser.war");
-		webapp.setTempDirectory(new File("target/javabrowser-tmp"));
-		// webapp.setDefaultsDescriptor(jetty_home+"/etc/webdefault.xml");
+        WebAppContext webapp = new WebAppContext();
+        webapp.setContextPath("/");
+        webapp.setWar("target/javabrowser.war");
+        webapp.setTempDirectory(new File("target/javabrowser-tmp"));
+        // webapp.setDefaultsDescriptor(jetty_home+"/etc/webdefault.xml");
 
-		server.setHandler(webapp);
+        server.setHandler(webapp);
 
-		server.start();
-		server.join();
-	}
+        server.start();
+        server.join();
+        System.out.println("JavaBrowser Server started on port "+port+", have fun!");
+    }
 
 }

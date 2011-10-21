@@ -149,16 +149,9 @@
           (not (empty? jar-path)) (json-response (get-classes-in-zip jar-path)))))
   (GET "/request" request
        (html [:div (str request)]))
-  (route/files "/" {:root "resources/public"})
-  ;; (route/resources "/")
+  ;;(route/files "/" {:root "resources/public"})
+  (route/resources "/")
   (route/not-found "<h1>Not Found</h1>"))
-
-;; (defn main
-;;   []
-;;   (run-jetty (var application-routes) {:port 9000 :join? false})
-;;   (println "Javabrowser started successfully. Browse to http://localhost:9000 to get started!"))
-
-;;(defn handler [request])
 
 (def app
   (->

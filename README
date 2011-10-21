@@ -1,5 +1,5 @@
 This is a web project that I'm using to learn Clojure (and
-Clojurescript!), so I'm sure this code is pretty ugly.
+Clojurescript!). It's very alpha and, also, this code is pretty ugly.
 
 This is a web application to explore the classes that are available to
 a java project.
@@ -17,6 +17,14 @@ required to run itself classpath)
 
 Contains clojure serve side code 
 
+* src/test/clj
+
+Server side unit tests
+
+* src/test/resources
+
+Stuff used by server unit tests
+
 * src/main/cljs
 
 Contains clojurescript client side stuff
@@ -32,16 +40,6 @@ Static resources that are all bundled up and included in the
 war. Stylesheets are generated from `stylesheets` sass
 files. Javascript is generated from `src/main/cljs`. Html is generated
 by exporting serve haml views. 
-
-* src/main/resources
-
-Stuff used by clojure server side code
-
-* src/test/resources
-
-Stuff used by clojure server unit tests
-
-* src/test/clj 
 
 # Server
 
@@ -149,15 +147,62 @@ The haml files can then use the the js. You can also play around with
 cljs files inside a cljs browser repl (use browser-repl shell script,
 or, in emacs, call inferior-lisp with it set to use browser-repl).
 
+# Building and deploying
+
+## scripts/compile.sh
+
+This compiles clojurescript into javascript code and copies resulting
+javascript a well as required css and images from closure project into the serve-project. 
+
+## Start serve
+
+At this point, you can use the `serve` command to play around with
+stylesheets and html layouts
+
+## scripts/deploy.sh
+
+This exports stuff out of serve and puts it into resources/public/ so
+that it can be used by the java webapp. 
+
+## Start jetty
+
+At this point you can run the java webapp using `lein ring server`
+
+## Create war
+
+Change the version in project.clj and maven-project/pom.xml. 
+
+    lein ring uberwar
+
+## Deploy as Maven Plugin
+
+Copy the uberwar to `src/main/resources/javabrowser.war`, then cd into
+maven-plugin and do a `mvn install`
+
+## Use locally as maven plugin
+
+At this point, you can add it as a maven depencency to local
+projects like this: 
+
+      <build>
+       <plugins>
+         ...
+         <plugin>
+           <groupId>com.upgradingdave</groupId>
+           <artifactId>javabrowser-maven-plugin</artifactId>
+           <version>x.x.x</version>
+         </plugin>
+       </plugin>
+       ...
+      </build>
+
+Then use `mvn javabrowser:start`
+
 # RoadMap
 
 ## Version 0.0.3 (in progress)
 
-* Replace jquery with clojurescript!
-* Add basic javascript and layout stuff to my generic serve project
 * Finish display of class in main screen
-* Able to browse thru jars in upper left of screen
-* Able to browse thru all classes in lower left
 
 # License
 

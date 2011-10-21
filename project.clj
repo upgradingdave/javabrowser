@@ -1,4 +1,4 @@
-(defproject com.upgradingdave/javabrowser "0.0.2"
+(defproject com.upgradingdave/javabrowser "0.0.3"
   :description "Web app to browse java code"
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [org.clojure/tools.logging "0.1.2"]
@@ -20,5 +20,6 @@
   :test-path "src/test/clj"
   :extra-classpath-dirs ["src/main/cljs" "/Users/dparoulek/src/clojure/clojurescript/src/clj" "/Users/dparoulek/src/clojure/clojurescript/src/cljs" "/Users/dparoulek/src/clojure/clojurescript/lib/goog.jar" "/Users/dparoulek/src/clojure/clojurescript/lib/compiler.jar"]
   :resources-path "src/main/resources"
+  :war-resources-path "resources/public"
   :dev-resources-path "src/test/resources"
   :ring {:handler javabrowser.web/app})
