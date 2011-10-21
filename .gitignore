@@ -22,3 +22,4 @@
 /serve-project/.sass-cache/*
 /serve-project/stylesheets/.sass-cache/*
 /serve-project/public/*
+/src/main/cljs/.repl/*

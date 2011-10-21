@@ -383,6 +383,7 @@ body {
   /* padding: 20px */
   font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
   /*+grid-background */
+  margin: 1em 0;
 }
 
 h1 {
@@ -391,29 +392,38 @@ h1 {
   margin: 0 0 20px 0;
 }
 
-.two-col {
+#three-col {
   /* The container mixin forces everything to be centered */
   /*+container */
 }
-.two-col #sidebar {
+#three-col #col1 {
   height: 100%;
   padding-left: 10px;
   display: inline;
   float: left;
   margin-right: 10px;
-  width: 310px;
+  width: 190px;
   background-color: white;
 }
-* html .two-col #sidebar {
+* html #three-col #col1 {
   overflow-x: hidden;
 }
-.two-col #content {
+#three-col #col2 {
+  display: inline;
+  float: left;
+  margin-right: 10px;
+  width: 190px;
+}
+* html #three-col #col2 {
+  overflow-x: hidden;
+}
+#three-col #col3 {
   display: inline;
   float: left;
   margin-right: 0;
-  width: 630px;
+  width: 550px;
 }
-* html .two-col #content {
+* html #three-col #col3 {
   overflow-x: hidden;
 }
 
@@ -490,4 +500,8 @@ li {
 .selected {
   background: #dddddd;
   color: white;
+}
+
+.hidden {
+  display: none;
 }

@@ -21,7 +21,7 @@ Contains clojure serve side code
 
 Contains clojurescript client side stuff
 
-* stylesheets
+* serve-project/stylesheets
 
 Contains the sass stylesheets. These are automatically converted to
 css files inside resources/public/stylesheets

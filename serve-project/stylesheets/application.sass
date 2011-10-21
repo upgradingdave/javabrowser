@@ -24,22 +24,25 @@ body
   /* padding: 20px
   font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif
   /*+grid-background
+  margin: 1em 0
 
 h1
   color: #484848
   font-size: 2em
   margin: 0 0 20px 0
 
-.two-col
+#three-col
   /* The container mixin forces everything to be centered
   /*+container 
-  #sidebar
+  #col1
     height: 100%
     padding-left: 10px    
-    +column(8)
+    +column(5)
     background-color: #fff
-  #content 
-    +column(16, true)
+  #col2
+    +column(5)
+  #col3
+    +column(14, true)
 
 #loading
   height: 45px
@@ -71,7 +74,6 @@ h1
   display: none  
 
 /* Lists
-
 li 
   padding: 2px
 
@@ -101,3 +103,6 @@ li
 
 .selected 
   +selected
+
+.hidden
+  display: none

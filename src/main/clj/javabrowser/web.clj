@@ -52,6 +52,12 @@
    :headers {"Content-Type" "application/json"}
    :body (json/generate-string data)})
 
+(defn text-response
+  [data & [status]]
+  {:status (or status 200)
+   :headers {"Content-Type" "text/plain"}
+   :body data})
+
 (defn layout
   [& [sidebar body]]
   (html
@@ -65,44 +71,73 @@
      [:div {:id "sidebar"}
       sidebar]
      [:div {:id "content"}
-      body]]]))
+      body]]
+    [:script {:type "text/javascript"
+              :src "/javascripts/closure/closure/goog/base.js"}]
+    [:script {:type "text/javascript"
+              :src "/javascripts/javabrowser.js"}]
+    [:script {:type "text/javascript"}
+     "goog.require('javabrowser.repl');\ngoog.require('javabrowser.core');"]]))
 
 (defn sidebar-html
   [& search]
   (html
-   [:div
-    [:a {:href "javascript:doSearch('.*');"} "classes"]
-    "|" [:a {:href "javascript:doJarSearch('.*');"} "jars"]]
-   [:input {:id "searchbox" :type "text"}]
-   [:div {:id "search-results"}]))
+   [:div {:id "sidebar"}
+    [:div {:id "jars"}
+     [:div {:class "searchbox"}
+      [:input {:type "text"}]]
+     [:ul {:id "list"}
+      [:li {:id "jar-name"}
+       [:a {:href "#"} "TODO" ]]]]
+    [:div {:id "classes"}
+     [:div {:class "searchbox"}
+      [:input {:type "text"}]]
+     [:ul {:id "list"}
+      [:li {:id "class-name"}
+       [:a {:href "#"} "TODO" ]]]]]))
 
 (defn java-methods-html
-  "Display a collection of Methods as html"
+  "Build a structure that represents methods of a class"
   [coll]
-  (html [:ul {:id "methods"}
-         (map  #(html [:li
-                       (.. Modifier (toString (.getModifiers %)))
-                       " "
-                       (.. % getReturnType getName)
-                       " "
-                       (.. % getName)
-                       "("
-                       (get-param-types %)
-                       ")"])
-               coll)]))
+  (vec
+   (cons :ul
+         (cons {:id "methods"}
+               (map #(vector :li (str (.. Modifier (toString (.getModifiers %)))
+                                      " " (.. % getReturnType getName)
+                                      " " (.. % getName)
+                                      "(" (get-param-types %) ")"))
+                    coll)))))
+
+(defn build-class-html
+  "Generate html to display metadata about a class"
+  [class-name]
+  (let [aclass (string-to-class class-name)]
+      (html [:div
+             [:div {:class "class-name"}
+              [:h1 (str (get-class-modifiers aclass) " " (.getName aclass))]]
+             (if (not (empty? (get-class-interfaces aclass)))
+               [:div {:class "class-interfaces"}
+                (str
+                 "implements "
+                 (format-class-interfaces (get-class-interfaces aclass)))]
+               )
+             ])))
 
 (defn content-html
-  "Render HTML for content section"
+  "Render structure that represents details of a class"
   [& [classname]]
-  (str (build-class-html classname)
-       (html [:br])
-       (java-methods-html (get-java-methods classname))))
+  (str (java-methods-html (get-java-methods classname))))
 
 (defroutes application-routes
   ;; (GET "/" [] (redirect "/methods?classname=java.lang.Object"))
-  ;; (GET "/methods" request
-  ;;      (let [classname (:classname (parse-query-string (:query-string request)))]
-  ;;        (layout (sidebar-html) (content-html classname))))
+  (GET "/methods" request
+       (let [classname (:classname (parse-query-string (:query-string request)))]
+         (layout (sidebar-html) (html (content-html classname)))))
+  ;; Build a html fragment that describes all details about a class
+  ;; and return it
+  (GET "/rest/classdetail" request
+       (let [classname (:classname (parse-query-string (:query-string request)))]
+         (text-response (list (content-html classname)))))
   (GET "/rest/search" request
        (let [search-term (:search (parse-query-string (:query-string request)))]
          (json-response (search-classes search-term))))

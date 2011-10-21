@@ -21,6 +21,7 @@
     (get-dependencies)
     (get-jars-on-classpath)))
 
+
 (defn get-entries-in-zip
   [fileName]
   "Get list of all entries inside jar file. TODO: when I tried to use
@@ -38,6 +39,11 @@ map, it complains that z is closed"
   "Get list of class files inside jar file."
   [fileName]
   (filter #(re-matches #".*\.class" %) (get-entries-in-zip fileName)))
+
+(defn get-classes-in-zips
+  "Returns a list of all classes in collection of zip files"
+  [coll]
+  (apply into (map get-classes-in-zip coll)))
 
 (defn path-to-class-name
   [filepath]
@@ -107,23 +113,7 @@ qualified java class name"
                                 [:a {:href (format "methods?classname=%s" %)}
                                  (format "%s" %)]) coll))))
 
-(defn build-class-html
-  "Generate html to display metadata about a class"
-  [class-name]
-  (let [aclass (string-to-class class-name)]
-      (html [:div
-             [:div {:class "class-name"}
-              [:h1 (str (get-class-modifiers aclass) " " (.getName aclass))]]
-             (if (not (empty? (get-class-interfaces aclass)))
-               [:div {:class "class-interfaces"}
-                (str
-                 "implements "
-                 (format-class-interfaces (get-class-interfaces aclass))) ]
-               )
-             ])))
-
 ;; Get metadata about Java Methods
-
 (defn get-java-methods
   "Get a collection of all the methods of string CLASSNAME"
   [classname]
