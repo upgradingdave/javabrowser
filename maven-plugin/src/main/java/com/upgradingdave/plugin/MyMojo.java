@@ -16,6 +16,7 @@ package com.upgradingdave.plugin;
  * limitations under the License.
  */
 
+import org.apache.log4j.Logger;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.mortbay.jetty.Connector;
@@ -40,6 +41,9 @@ import java.io.OutputStream;
  * 
  */
 public class MyMojo extends AbstractMojo {
+	
+	protected static Logger log = Logger.getLogger(MyMojo.class); 
+	
 	public void execute() throws MojoExecutionException {
 		try {
 			// JavaBrowser jb = new JavaBrowser();
@@ -48,7 +52,8 @@ public class MyMojo extends AbstractMojo {
 			// System.out.println("Press any key to stop the javabrowser server");
 			// byte name[] = new byte[100];
 			// System.in.read(name);
-
+			
+			log.debug("Attempting to start javabrowser");
 			moveWar();
 			runWithJetty();
 
@@ -60,8 +65,7 @@ public class MyMojo extends AbstractMojo {
 	public static void main(String args[]) {
 		try {
 			MyMojo mojo = new MyMojo();
-			mojo.moveWar();
-			mojo.runWithJetty();
+			mojo.execute();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -120,7 +124,7 @@ public class MyMojo extends AbstractMojo {
 
         server.start();
         server.join();
-        System.out.println("JavaBrowser Server started on port "+port+", have fun!");
+        log.info("JavaBrowser Server started on port "+port+", have fun!");
     }
 
 }

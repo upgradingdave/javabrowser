@@ -10,7 +10,8 @@
             [compojure.handler :as handler]
             [compojure.response :as response]
             [clojure.string :as str]
-            [clj-json.core :as json])
+            [clj-json.core :as json]
+            [clojure.contrib.logging :as log])
   (:import (java.net URLEncoder)
            (java.lang.reflect Modifier)
            (java.lang.reflect TypeVariable)))
@@ -147,10 +148,15 @@
          (cond
           (not (empty? search-term)) (json-response (search-jars search-term))
           (not (empty? jar-path)) (json-response (get-classes-in-zip jar-path)))))
-  (GET "/request" request
-       (html [:div (str request)]))
+  ;; (GET "/request" request
+  ;;      (html [:div (str request)]))
+  ;; files serves static files from directory defined by root
+  ;; for dev: 
   ;;(route/files "/" {:root "resources/public"})
-  (route/resources "/")
+  ;; for prod
+  (route/files "/" {:root "target/javabrowser-tmp/webapp"})
+  ;; resources serves static files out of classpath
+  ;;(route/resources "/" {:root ""})
   (route/not-found "<h1>Not Found</h1>"))
 
 (def app

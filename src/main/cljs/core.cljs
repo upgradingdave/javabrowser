@@ -91,7 +91,7 @@
   [search]
   (let [search (if (empty? search) ".*" search)]
     (util/request
-     (str "http://localhost:3000/rest/jars?search=" search)
+     (str "/rest/jars?search=" search)
      (fn [response] (create-jar-menu-items (util/parse-response response))))))
 
 (defn update-list-of-jars
@@ -118,7 +118,7 @@
 (defn get-list-of-classes-in-jar
   [path-to-jar]
   (util/request
-   (str "http://localhost:3000/rest/jars?jar=" path-to-jar)
+   (str "/rest/jars?jar=" path-to-jar)
    (fn [response] (update-list-of-classes (util/parse-response response)))))
 
 (defn update-list-of-classes
@@ -149,7 +149,7 @@
 (defn get-class-details
   [classname]
   (util/request
-   (str "http://localhost:3000/rest/classdetail?classname=" classname)
+   (str "/rest/classdetail?classname=" classname)
    (fn [response] (update-class-detail (util/parse-response response)))))
 
 ;; (defn update-class-detail
