@@ -24,3 +24,5 @@
 /serve-project/public/*
 /src/main/cljs/.repl/*
 /javabrowser-0.0.3-standalone.war
+/maven-plugin/logs/test.log
+/javabrowser-0.0.3.war
