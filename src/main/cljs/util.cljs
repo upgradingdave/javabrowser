@@ -64,10 +64,32 @@
         idx (. path (lastIndexOf "/"))]
     (. path (slice (+ 1 idx) length))))
 
+(defn path-to-fqdn
+  "Convert file system path of class file to dot notation"
+  [path]
+  (do
+    (. (. path (replace (js/RegExp. "/" "g") ".")) (replace ".class" ""))))
+
 (defn hide-or-show
   "Toggle hidden css class of element identified by csspath"
   [csspath]
   (classes/toggle (get-element csspath) "hidden"))
+
+(defn unselect-all
+  "Unselect all items targeted by SELECTOR by removing 'selected' class"
+  [selector]
+  (let [items (dom/query selector)]
+    (loop [idx 0]
+      (if (< idx (alength items)) (do (classes/remove (aget items idx) "selected")
+                                      (recur (inc idx)))))))
+
+(defn select-all
+  "Select all items targeted by SELECTOR by removing 'selected' class"
+  [selector]
+  (let [items (dom/query selector)]
+    (loop [idx 0]
+      (if (< idx (alength items)) (do (classes/add (aget items idx) "selected")
+                                      (recur (inc idx)))))))
 
 ;; I stole these methods from twitterbuzz sample app
 (defn append

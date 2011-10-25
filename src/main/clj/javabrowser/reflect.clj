@@ -43,7 +43,7 @@ map, it complains that z is closed"
 (defn get-classes-in-zips
   "Returns a list of all classes in collection of zip files"
   [coll]
-  (apply into (map get-classes-in-zip coll)))
+  (reduce into (map get-classes-in-zip coll)))
 
 (defn path-to-class-name
   [filepath]

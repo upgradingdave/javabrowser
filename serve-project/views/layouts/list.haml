@@ -1,0 +1,24 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}
+    %title
+      = @title
+    %link{:rel => "stylesheet", :href => "/stylesheets/application.css"}
+    %link{:rel => "stylesheet", :href => "/stylesheets/css/common.css"}
+    %link{:rel => "stylesheet", :href => "/stylesheets/css/menu.css"}
+    %link{:rel => "stylesheet", :href => "/stylesheets/css/menuitem.css"}
+    %link{:rel => "stylesheet", :href => "/stylesheets/css/menuseparator.css"}
+    %link{:rel => "stylesheet", :href => "/stylesheets/css/custombutton.css"}
+    %link{:rel => "stylesheet", :href => "/stylesheets/css/menubutton.css"}
+  %body
+    = yield
+
+    %script{:type => "text/javascript", :src => "/javascripts/closure/closure/goog/base.js"}
+    %script{:type => "text/javascript", :src => "/javascripts/javabrowser.js"}
+    %script{:type => "text/javascript"}
+      goog.require('javabrowser.repl');
+      goog.require('javabrowser.ul');
+      
+
+

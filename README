@@ -120,6 +120,16 @@ REST
 
     /rest/search?search=<class-name>
 
+### Search for classes within jars
+
+API
+   
+    (get-classes-in-zips [jar-file1 jar-file2] ... etc)
+
+REST
+
+    /rest/classes?jars="path-to-jar1,path-to-jar2,etc.."
+
 # Front End (Clojurescript, Sass, Haml)
 
 I'm using a few technologies here including Clojurescript, and a ruby

@@ -1,6 +1,7 @@
 (ns javabrowser.core
   (:require
    [javabrowser.util :as util]
+   [javabrowser.ul :as ul]
    [cljs.reader :as reader]
    [goog.dom :as dom]
    [goog.json :as json]
@@ -17,7 +18,8 @@
    [goog.ui.Menu :as Menu]
    [goog.ui.MenuButton :as MenuButton]
    [goog.ui.Separator :as Separator]
-   [goog.ui.decorate :as decorator]))
+   [goog.ui.decorate :as decorator]
+   [goog.dom.classes :as classes]))
 
 (def DELAY 500)
 (def HOST "/rest/jars?search=.*")
@@ -45,46 +47,47 @@
 
 (defn toggle-selected-jar
   [jar-path]
-  (swap! state update-state jar-path))
+  (let []
+    (swap! state update-state jar-path)))
 
 ;; Manage menu of jars
-(defn create-jar-menu-items
-  "Create menu of jars"
-  [coll]
-  (do
-    (. jar-menu (removeChildren true))
-    (doseq [x coll]
-      (. jar-menu (addItem (create-jar-menu-item x))))))
+;; (defn create-jar-menu-items
+;;   "Create menu of jars"
+;;   [coll]
+;;   (do
+;;     (. jar-menu (removeChildren true))
+;;     (doseq [x coll]
+;;       (. jar-menu (addItem (create-jar-menu-item x))))))
 
-(defn create-jar-menu-button
-  []
-  (let [button (goog.ui.MenuButton. "Add Jars" jar-menu)
-        jars (util/get-element "#jars .menu")]
-    (. button (setDispatchTransitionEvents goog.ui.Component.State.ALL true))
-    (. button (setId "jar-button"))
-    (. button (render jars))
-    (. button (setTooltip "Jar Menu"))
-    (. jar-menu (setId "jar-menu"))
-    (events/listen jar-menu (. goog.ui.Component.EventType ACTION)
-                   handle-jar-menu-change)))
+;; (defn create-jar-menu-button
+;;   []
+;;   (let [button (goog.ui.MenuButton. "Add Jars" jar-menu)
+;;         jars (util/get-element "#jars .menu")]
+;;     (. button (setDispatchTransitionEvents goog.ui.Component.State.ALL true))
+;;     (. button (setId "jar-button"))
+;;     (. button (render jars))
+;;     (. button (setTooltip "Jar Menu"))
+;;     (. jar-menu (setId "jar-menu"))
+;;     (events/listen jar-menu (. goog.ui.Component.EventType ACTION)
+;;                    handle-jar-menu-change)))
 
-(defn create-jar-menu-item
-  [jar-path]
-  (let [display (util/trunc-string (util/get-file-name jar-path))
-        item (goog.ui.MenuItem. display jar-path)]
-    (. item (setId jar-path))
-    (. item (setDispatchTransitionEvents goog.ui.Component.State.ALL true))
-    item))
+;; (defn create-jar-menu-item
+;;   [jar-path]
+;;   (let [display (util/trunc-string (util/get-file-name jar-path))
+;;         item (goog.ui.MenuItem. display jar-path)]
+;;     (. item (setId jar-path))
+;;     (. item (setDispatchTransitionEvents goog.ui.Component.State.ALL true))
+;;     item))
 
-(defn handle-jar-menu-change
-  [e]
-  (let [item (. e target)
-        jar-path (. item (getValue))]
-    (util/log (str "Clicked Menu Item: " jar-path))
-    (toggle-selected-jar jar-path)
-    (update-list-of-jars (:selected-jars @state))
-    (. jar-menu (removeChild jar-path true))
-    (get-list-of-classes-in-jar jar-path)))
+;; (defn handle-jar-menu-change
+;;   [e]
+;;   (let [item (. e target)
+;;         jar-path (. item (getValue))]
+;;     (util/log (str "Clicked Menu Item: " jar-path))
+;;     (toggle-selected-jar jar-path)
+;;     (update-list-of-jars (:selected-jars @state))
+;;     (. jar-menu (removeChild jar-path true))
+;;     (get-list-of-classes-in-jar jar-path)))
 
 ;; manage list of selected jars
 (defn get-list-of-jars
@@ -92,58 +95,58 @@
   (let [search (if (empty? search) ".*" search)]
     (util/request
      (str "/rest/jars?search=" search)
-     (fn [response] (create-jar-menu-items (util/parse-response response))))))
+     (fn [response]
+       (update-list-of-jars (util/parse-response response))
+       (get-list-of-classes-in-jars (:selected-jars @state))))))
+
+(defn on-click-jar
+  "When user clicks jar, add or remove from selected list, update css,
+  and update class list"
+  [e]
+  (let [target (. e target)
+        jar-path (. target data)]
+    (util/log ("Clicked jar: " jar-path))
+    (toggle-selected-jar jar-path)
+    (classes/toggle target "selected")
+    (get-list-of-classes-in-jars (:selected-jars @state))))
 
 (defn update-list-of-jars
   "COLL is a list of absolute file paths to jar files"
   [coll]
-  (let [package-list (util/get-element "#jars ul")]
-    (dom/removeChildren package-list true)
+  (let [elemid "#jars ul"]
+    (ul/remove-all-items elemid)
     (doseq [item coll]
-      (. package-list (appendChild (create-jar-li item))))))
-
-(defn create-jar-li
-  [jar-path]
-  (let [anchor (dom/createDom "a" (js* "{href:'#'}")
-                              (util/trunc-string (util/get-file-name jar-path)))]
-    (events/listen anchor
-                   (. events/EventType CLICK)
-                   (fn [] (do
-                           (toggle-selected-jar jar-path)
-                           (update-list-of-jars (:selected-jars @state))
-                           )))
-    (dom/createDom "li" nil anchor)))
+      (ul/create-and-add-li
+       elemid (util/get-file-name item)
+       {:onclick on-click-jar :data item :classes "selected"})
+      (toggle-selected-jar item))))
 
 ;; manage list of classes 
-(defn get-list-of-classes-in-jar
-  [path-to-jar]
+(defn get-list-of-classes-in-jars
+  [jars]
   (util/request
-   (str "/rest/jars?jar=" path-to-jar)
+   (str "/rest/classes?jars=" (apply str (interpose "," jars)))
    (fn [response] (update-list-of-classes (util/parse-response response)))))
+
+(defn on-click-classname
+  [e]
+  (let [target (. e target)
+        class-path (. target data)]
+    (util/unselect-all "#classes ul a")
+    (util/log ("Clicked class: " class-path))
+    (classes/add target "selected")
+    (get-class-details (util/path-to-fqdn class-path))))
 
 (defn update-list-of-classes
   "COLL is a list of fully qualified classnames"
   [coll]
-  (let [class-list (util/get-element "#classes ul")]
-    (dom/removeChildren class-list true)
-    (loop [coll coll]
-      (if (not (empty? coll))
-        (. class-list (appendChild (create-class-li (first coll)))))
-      (if (not (empty? (next coll)))
-        (recur (next coll))))))
-
-(defn path-to-fqdn
-  [path]
-  (do
-    (. (. path (replace (js/RegExp. "/" "g") ".")) (replace ".class" ""))))
-
-(defn create-class-li
-  [class-name] 
-  (let [anchor (util/element :a {:href "#"} (util/trunc-string (util/get-file-name class-name) 25))]
-    (events/listen anchor
-                   (. events/EventType CLICK)
-                   (fn [] (get-class-details (path-to-fqdn class-name))))
-    (dom/createDom "li" nil anchor)))
+  (let [elemid "#classes ul"]
+    (ul/remove-all-items elemid)
+    (doseq [item coll]
+      (ul/create-and-add-li
+       elemid
+       (util/trunc-string (util/get-file-name item) 25)
+       {:onclick on-click-classname :data item}))))
 
 ;; Manage Class details
 (defn get-class-details
@@ -151,13 +154,6 @@
   (util/request
    (str "/rest/classdetail?classname=" classname)
    (fn [response] (update-class-detail (util/parse-response response)))))
-
-;; (defn update-class-detail
-;;   [response]
-;;   (let [classdetail (util/get-element "#col3")
-;;         new (util/build response)]
-;;     (dom/removeChildren classdetail)
-;;     (. classdetail (appendChild new))))
 
 (defn update-class-detail
   [response]
@@ -177,8 +173,8 @@
 
 (defn ^:export init
   []
-  (create-jar-menu-button)
-  (get-list-of-jars ".*"))
+  (do
+    (get-list-of-jars ".*")))
 
 (init)
 

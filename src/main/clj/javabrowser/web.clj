@@ -5,7 +5,9 @@
         [hiccup.core :only (html)]
         [hiccup.page-helpers :only (include-css include-js)]
         [ring.middleware.json-params]
-        [javabrowser.reflect])
+        [javabrowser.reflect]
+        [javabrowser.filesystem]
+        [clojure.java.io :only (file)])
   (:require [compojure.route :as route]
             [compojure.handler :as handler]
             [compojure.response :as response]
@@ -129,6 +131,17 @@
   [& [classname]]
   (str (java-methods-html (get-java-methods classname))))
 
+(defn get-class-results
+  "Takes comma delimitd list of JARS and returns first MAX classes
+  starting at OFFSET in COLLection of jars"
+  [jars & [max offset]]
+  (let [max (or max 20)
+        offset (or offset 0)
+        jars (clojure.string/split jars #",")]
+    (take max (sort file-name-comparator
+               (get-classes-in-zips
+                (map file jars))))))
+
 (defroutes application-routes
   ;; (GET "/" [] (redirect "/methods?classname=java.lang.Object"))
   (GET "/methods" request
@@ -148,13 +161,22 @@
          (cond
           (not (empty? search-term)) (json-response (search-jars search-term))
           (not (empty? jar-path)) (json-response (get-classes-in-zip jar-path)))))
+  (GET "/rest/classes" request
+       (let [jars (:jars (parse-query-string (:query-string request)))]
+         (if (not (empty? jars))
+           (json-response
+            (get-class-results jars))
+           (json-response ""))))
+
   ;; (GET "/request" request
   ;;      (html [:div (str request)]))
   ;; files serves static files from directory defined by root
   ;; for dev: 
-  ;;(route/files "/" {:root "resources/public"})
+  (route/files "/" {:root "resources/public"})
+
   ;; for prod
-  (route/files "/" {:root "target/javabrowser-tmp/webapp"})
+  ;;(route/files "/" {:root "target/javabrowser-tmp/webapp"})
+
   ;; resources serves static files out of classpath
   ;;(route/resources "/" {:root ""})
   (route/not-found "<h1>Not Found</h1>"))

@@ -14,4 +14,7 @@ cp -R closure/css serve-project/public/stylesheets/css
 cp -R closure/images serve-project/public/images/closure
 cp -R images/* serve-project/public/images/
 
+cp -R serve-project/public/* resources/public/
+
+
 

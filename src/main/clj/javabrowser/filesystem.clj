@@ -1,5 +1,6 @@
 (ns javabrowser.filesystem
-  (:import (java.io File)))
+  (:import (java.io File)
+           (java.util Comparator)))
 
 (defn file-in-dir?
   "Determine whether filename exists in dirpath (relative or absolute)"
@@ -47,3 +48,15 @@
   (if filepath
     (apply str (drop (+ 1 (.. filepath (lastIndexOf
                                         (File/separator)))) filepath))))
+
+"Ignores directory and only compares the file name"
+(def file-name-comparator
+  (proxy [Comparator] []
+    (compare
+      [o1 o2]
+      (. (get-file-name o1) (compareTo (get-file-name o2))))
+    (equals
+      [obj]
+      (if (. (get-file-name this) (equals (get-file-name obj)))
+        true
+        false))))
