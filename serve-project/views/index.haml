@@ -1,18 +1,21 @@
 #three-col
   #col1
     #jars
-      .menu
+      %h2 
+        Jars
       %ul.list
         %li.jar-name
   #col2
     #classes
-      %div.loading{:class => "hidden"}
-        %img{:src => '/images/ajax-loader.gif'}
+      %h2 
+        Classes
+      #loading-wrap
+        %div.loading{:class => "hidden"}
+          %img{:src => '/images/ajax-loader.gif'}
       .searchbox
-        %input{:type => 'text', :class => 'hidden'}
+        %input{:type => 'text'}
       %ul.list
         %li.class-name
-          Please add a jar from the dropdown to see the classes
   #col3
     #class-overview
       #package-name

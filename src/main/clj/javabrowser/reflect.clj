@@ -45,29 +45,27 @@ map, it complains that z is closed"
   [coll]
   (reduce into (map get-classes-in-zip coll)))
 
+(defn search-classes
+   "Filters a list COLL of fully qualified class names by search-term"
+   [search-term coll]
+   (filter #(re-seq (re-pattern (str "(?i)" search-term)) %) coll))
+
 (defn path-to-class-name
   [filepath]
   "Convert path like 'com/apple/java/AppleSystemLog.class' into fully
 qualified java class name"
   (str/replace (nth (re-matches #"(.*)\.class" filepath) 1) "/" "."))
 
-(defn find-classes
-  "TODO: WIP. Attempts to find names of all classes on classpath. First, find names of classes in all the jar files on the classpath"
-  []
-  (let [class-files (mapcat #(get-classes-in-zip %) (get-jars))]
-    (map #(path-to-class-name %) class-files)
-    ))
+;; Deprecated in favor of using maven pom.xml
+;; (defn find-classes
+;;   "TODO: WIP. Attempts to find names of all classes on classpath. First, find names of classes in all the jar files on the classpath"
+;;   []
+;;   (let [class-files (mapcat #(get-classes-in-zip %) (get-jars))]
+;;     (map #(path-to-class-name %) class-files)
+;;     ))
 
-(defstruct search-results :total :offset :max :results)
-
-(defn search-classes
-  "Returns list of search results for a fully qualified class name on the classpath."
-  [search-term & [offset max]] 
-  (let [offset (or offset 0)
-        max (or max 20)
-        all-classes (filter #(re-seq (re-pattern (str "(?i)" search-term)) %) (find-classes))
-        total (count all-classes)]
-    (take max (drop offset all-classes))))
+;; Now handled in web.clj
+;;(defstruct search-results :total :offset :max :results)
 
 (defn search-jars
   [search-term & [offset max]]

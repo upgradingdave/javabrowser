@@ -2,6 +2,7 @@
   (:require
    [javabrowser.util :as util]
    [javabrowser.ul :as ul]
+   [javabrowser.search :as search]
    [cljs.reader :as reader]
    [goog.dom :as dom]
    [goog.json :as json]
@@ -117,15 +118,23 @@
     (ul/remove-all-items elemid)
     (doseq [item coll]
       (ul/create-and-add-li
-       elemid (util/get-file-name item)
+       elemid
+       (util/trunc-string (util/get-file-name item) 25)
        {:onclick on-click-jar :data item :classes "selected"})
       (toggle-selected-jar item))))
 
 ;; manage list of classes 
 (defn get-list-of-classes-in-jars
-  [jars]
+  [jars & [search max offset]]
+  (let [search (or search ".*")
+        max (or max "20")
+        offset (or offset "0")])
+  (classes/remove (util/get-element "#classes .loading") "hidden")
   (util/request
-   (str "/rest/classes?jars=" (apply str (interpose "," jars)))
+   (str "/rest/classes?jars=" (apply str (interpose "," jars))
+        "&search=" search
+        "&max=" max
+        "&offset=" offset)
    (fn [response] (update-list-of-classes (util/parse-response response)))))
 
 (defn on-click-classname
@@ -146,7 +155,8 @@
       (ul/create-and-add-li
        elemid
        (util/trunc-string (util/get-file-name item) 25)
-       {:onclick on-click-classname :data item}))))
+       {:onclick on-click-classname :data item})
+      (classes/add (util/get-element "#classes .loading") "hidden"))))
 
 ;; Manage Class details
 (defn get-class-details
@@ -162,19 +172,14 @@
     (dom/removeChildren classdetail)
     (. classdetail (appendChild new))))
 
-(defn addJarSearchListener
-  []
-  (let [searchbox (util/get-element "#jars input")
-        delay (goog.async.Delay.
-               (fn [] (get-list-of-jars (. searchbox value))) 500)]
-    (events/listen searchbox
-                   (. events/EventType KEYUP)
-                   (fn [] (. delay (start))))))
-
 (defn ^:export init
   []
   (do
-    (get-list-of-jars ".*")))
+    (get-list-of-jars ".*")
+    ;; Add search listener so it will filter list of classes by
+    ;; whatever is typed into the text box
+    (search/addSearchListener
+     "#classes .searchbox" #(get-list-of-classes-in-jars (:selected-jars @state) %))))
 
 (init)
 

@@ -97,20 +97,7 @@ REST (wip, need to finish)
 
     /rest/jars?jar=<path-to-jar>
 
-### Find all classes on classpath
-
-`find-classes` builds a list of fully qualified names of classes and
-interfaces that are on the current classpath
-
-API 
-
-    find-classes
-
-REST 
-
-    /rest/search?search=.*
-
-### Search for class by name
+### Searches inside jars in pom.xml for class by name
 
 API 
 
@@ -129,6 +116,12 @@ API
 REST
 
     /rest/classes?jars="path-to-jar1,path-to-jar2,etc.."
+
+    or filter by class name: 
+    /rest/classes?jars="path-to-jar1,path-to-jar2,etc.."&search="Appender"
+
+    or filter AND page the results
+    /rest/classes?jars="path-to-jar1,path-to-jar2,etc.."&search="Appender"&offset=20&max=20
 
 # Front End (Clojurescript, Sass, Haml)
 
@@ -210,9 +203,28 @@ Then use `mvn javabrowser:start`
 
 # RoadMap
 
+## Version 0.0.5 (Not started yet)
+
+* Maybe make it a hosted webapp where (in addition to local maven
+  plugin)? People could search for jars similar to findjars website
+  and then have ability to search and inspect classes.
+
+## Version 0.0.4 (Not started yet)
+
+* Maybe add ability to drill down into source code using maven capabilities?
+
 ## Version 0.0.3 (in progress)
 
-* Finish display of class in main screen
+* Added more features for parsing maven pom.xml such as ability to
+replace property tokens
+
+* Converted jquery to clojurescript
+
+* Changed UI to use combo box to select jars, then changed back to use
+  list. Learned a lot about google clojure widgets ;-)
+
+* Fixed relative file path so it works in prod jar and in lein ring
+  server (sort of)
 
 # License
 

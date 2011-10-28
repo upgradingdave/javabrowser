@@ -13,12 +13,12 @@
 (deftest page-results
   (let [junit-jar-name (get-full-dir-path "src/test/resources/junit-4.0.jar")
         log4j-jar-name (get-full-dir-path "src/test/resources/log4j-1.2.16.jar")
-        compojure-jar-name (get-full-dir-path "src/test/resources/compojure-0.6.5.jar")]
-    (is (=
-         (count (get-class-results
-                 (apply str
-                        (interpose
-                         ","
-                         [junit-jar-name log4j-jar-name compojure-jar-name]))
-                 ))
-         20) "Get first 20 results by default")))
+        compojure-jar-name (get-full-dir-path "src/test/resources/compojure-0.6.5.jar")
+        list-o-jars (apply
+                     str (interpose "," [junit-jar-name log4j-jar-name compojure-jar-name]))]
+    (is (= (count (get-class-results (apply str list-o-jars))) 20)
+        "Get first 20 results by default")
+    (is (= (count (get-class-results list-o-jars "Appender")) 20)
+        "Get first page of results")
+    (is (= (count (get-class-results list-o-jars "Appender" 20 20)) 11)
+        "Get next page of results")))

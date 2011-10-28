@@ -1,22 +1,31 @@
+/* Pallet */
+/* http://www.colourlovers.com/palette/292482/Terra
+
 /* Blueprint Grid */
 $blueprint-grid-columns : 24
-$blueprint-grid-width   : 30px
+$blueprint-grid-width   : 40px
 $blueprint-grid-margin  : 10px
+$blueprint-font-size    : 14px
 
 /* Forms */
 
 @import "compass/reset"
-@import "compass/utilities/tables/alternating-rows-and-columns"
 @import "compass/layout/grid-background"
 @import "blueprint/grid"
-@import "upgradingdave/tables"
-@import "upgradingdave/forms"
-@import "upgradingdave/buttons"
-@import "upgradingdave/selections"
+@import "compass/typography/links"
+@import "blueprint/interaction"
+@import "blueprint/link-icons"
+@import "blueprint/typography"
+@import "compass/typography/lists/bullets"
 
 +global-reset
 
-+table-netflix
++blueprint-interaction
+
+a
+  /* normal hover active visitied focus
+  +link-colors(#031634, #033649, #033649, #031634, #033649)
+
 
 body
   font-size: 90%
@@ -25,12 +34,11 @@ body
   font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif
   /*+grid-background
   margin: 1em 0
-
-h1
-  color: #484848
-  font-size: 2em
-  margin: 0 0 20px 0
-
+  +blueprint-typography(true)
+  ul
+    padding-left: 0
+    +no-bullets
+  
 #three-col
   /* The container mixin forces everything to be centered
   /*+container 
@@ -48,12 +56,12 @@ h1
   height: 45px
   margin-bottom: 5px  
 
-#searchbox
+#searchbox  
   padding: 5px  
   background-color: #fff
 
 #refresh
-  img
+  imgp
     vertical-align: middle
   a
     text-decoration: none
@@ -101,8 +109,34 @@ li
   line-height: 2em
   margin-bottom: 2em
 
-.selected 
-  +selected
-
 .hidden
   display: none
+
+#jars
+  height: 300px
+  background-image: url("../images/jars.png")
+  background-size: 20px  
+  background-repeat: no-repeat
+  background-position: left center
+
+#jars a
+  text-decoration: line-through
+  padding: 0px 22px
+  margin: -2px 0
+  background-repeat: no-repeat
+  background-position: left center
+  /* normal hover active visited focus
+  +link-colors(#e8ddcb, #cdb380, #cdb380, #e8ddcb, #e8ddcb)
+
+#jars a.selected
+  text-decoration: underline
+  +link-icon('accept.png', false)
+  padding: 0px 22px
+  margin: -2px 0
+  background-repeat: no-repeat
+  background-position: left center
+  /* normal hover active visited focus
+  +link-colors(#031634, #033649, #033649, #031634, #031634)
+
+#classes #loading-wrap
+  height: 30px

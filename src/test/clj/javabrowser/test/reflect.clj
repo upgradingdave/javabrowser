@@ -24,12 +24,10 @@
     (is (= (count (get-classes-in-zip log4j-jar)) 308) "Find some class files in jar")
     (is (= (count (get-classes-in-zips (map file (split log4j-jar-name #",")))) 308) "Find classes files in list with one jar")
     (is (= (count (get-classes-in-zips [junit-jar log4j-jar])) (+ 308 92)) "Find classes in multiple jars")
-    (is (= (count (get-classes-in-zips [junit-jar log4j-jar compojure-jar])) (+ 308 92)) "Find classes in multiple jars")))
+    (is (= (count (get-classes-in-zips [junit-jar log4j-jar compojure-jar])) (+ 308 92)) "Find classes in multiple jars")
+    (is (= (count (search-classes "log4j" (get-classes-in-zips [junit-jar log4j-jar compojure-jar]))) 308) "Filter results by search term")))
 
 (deftest test-methods
   (let [classname "org.apache.log4j.varia.HUPNode"]
     (is (> (count (get-java-methods classname)) 0))))
-
-
-
 

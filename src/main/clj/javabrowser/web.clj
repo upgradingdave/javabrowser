@@ -134,13 +134,16 @@
 (defn get-class-results
   "Takes comma delimitd list of JARS and returns first MAX classes
   starting at OFFSET in COLLection of jars"
-  [jars & [max offset]]
-  (let [max (or max 20)
+  [jars & [search-term max offset]]
+  (let [search-term (or search-term ".*")
+        max (or max 20)
         offset (or offset 0)
         jars (clojure.string/split jars #",")]
-    (take max (sort file-name-comparator
-               (get-classes-in-zips
-                (map file jars))))))
+    (take max
+          (drop offset
+                (sort file-name-comparator
+                      (search-classes search-term (get-classes-in-zips
+                                                   (map file jars))))))))
 
 (defroutes application-routes
   ;; (GET "/" [] (redirect "/methods?classname=java.lang.Object"))
@@ -152,9 +155,6 @@
   (GET "/rest/classdetail" request
        (let [classname (:classname (parse-query-string (:query-string request)))]
          (text-response (list (content-html classname)))))
-  (GET "/rest/search" request
-       (let [search-term (:search (parse-query-string (:query-string request)))]
-         (json-response (search-classes search-term))))
   (GET "/rest/jars" request
        (let [search-term (:search (parse-query-string (:query-string request)))
              jar-path (:jar (parse-query-string (:query-string request)))]
@@ -162,10 +162,13 @@
           (not (empty? search-term)) (json-response (search-jars search-term))
           (not (empty? jar-path)) (json-response (get-classes-in-zip jar-path)))))
   (GET "/rest/classes" request
-       (let [jars (:jars (parse-query-string (:query-string request)))]
+       (let [jars (:jars (parse-query-string (:query-string request)))
+             search-term (:search (parse-query-string (:query-string request)))
+             offset (:offset (parse-query-string (:query-string request)))
+             max (:max (parse-query-string (:query-string request)))]
          (if (not (empty? jars))
            (json-response
-            (get-class-results jars))
+            (get-class-results jars search-term max offset))
            (json-response ""))))
 
   ;; (GET "/request" request
