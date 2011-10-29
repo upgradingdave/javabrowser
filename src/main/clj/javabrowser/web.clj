@@ -146,10 +146,6 @@
                                                    (map file jars))))))))
 
 (defroutes application-routes
-  ;; (GET "/" [] (redirect "/methods?classname=java.lang.Object"))
-  (GET "/methods" request
-       (let [classname (:classname (parse-query-string (:query-string request)))]
-         (layout (sidebar-html) (html (content-html classname)))))
   ;; Build a html fragment that describes all details about a class
   ;; and return it
   (GET "/rest/classdetail" request
@@ -175,10 +171,10 @@
   ;;      (html [:div (str request)]))
   ;; files serves static files from directory defined by root
   ;; for dev: 
-  (route/files "/" {:root "resources/public"})
+  ;;(route/files "/" {:root "resources/public"})
 
-  ;; for prod
-  ;;(route/files "/" {:root "target/javabrowser-tmp/webapp"})
+  ;;for prod
+  (route/files "/" {:root "target/javabrowser-tmp/webapp"})
 
   ;; resources serves static files out of classpath
   ;;(route/resources "/" {:root ""})

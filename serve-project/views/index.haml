@@ -1,13 +1,13 @@
 #three-col
   #col1
     #jars
-      %h2 
+      %h1 
         Jars
       %ul.list
         %li.jar-name
   #col2
     #classes
-      %h2 
+      %h1 
         Classes
       #loading-wrap
         %div.loading{:class => "hidden"}
@@ -17,13 +17,23 @@
       %ul.list
         %li.class-name
   #col3
+    %h1 
+      Class Detail
+    #class-nav
+      %a{:href => "#summary"}
+        declaration
+      &nbsp;|&nbsp;
+      %a{:href => "#constructors"}
+        constructors
+      &nbsp;|&nbsp;
+      %a{:href => "#methods"}
+        methods
+    %a{:id => "summary", :name => "summary"}
     #class-overview
       #package-name
         java.lang
-
-      #short-class-name
+      %h2.short-class-name
         String
-
       #class-hierarchy  
         .parent-class
           java.lang.Object
@@ -38,9 +48,9 @@
       #class-implements
         implements Serializable, CharSequence, Comparable<String>
 
-
+    %a{:id => "constructors", :name => "constructors"}
     #class-constructors
-      %h1 
+      %h2
         Constructors
       .constructor
         String()
@@ -72,9 +82,9 @@
         String(StringBuffer buffer)
       .constructor  
         String(StringBuilder builder)
-
+    %a{:id => "methods", :name => "methods"}
     #class-methods
-      %h1
+      %h2
         Methods
       .method
         char 	charAt(int index)

@@ -16,21 +16,26 @@ package com.upgradingdave.plugin;
  * limitations under the License.
  */
 
-import org.apache.log4j.Logger;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.descriptor.PluginDescriptor;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.classworlds.ClassRealm;
+import org.codehaus.classworlds.ClassWorld;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 //import javabrowser.JavaBrowser;
 
@@ -38,25 +43,30 @@ import java.io.OutputStream;
  * Goal that starts a Java Browser Server
  * 
  * @goal start
- * 
+ * @requiresDependencyResolution runtime
  */
 public class MyMojo extends AbstractMojo {
-	
-	protected static Logger log = Logger.getLogger(MyMojo.class); 
+
+	/**
+	 * @parameter expression="${project}"
+	 * @required
+	 * @readonly
+	 */
+	private MavenProject project;
+
+	/**
+     * The plugin descriptor
+     * 
+     * @parameter default-value="${descriptor}"
+     */
+    private PluginDescriptor descriptor;
 	
 	public void execute() throws MojoExecutionException {
 		try {
-			// JavaBrowser jb = new JavaBrowser();
-			// jb.startServer();
-
-			// System.out.println("Press any key to stop the javabrowser server");
-			// byte name[] = new byte[100];
-			// System.in.read(name);
-			
-			log.debug("Attempting to start javabrowser");
+			getLog().debug("Attempting to start javabrowser");
+			setRuntimeClasspath();
 			moveWar();
 			runWithJetty();
-
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -66,6 +76,67 @@ public class MyMojo extends AbstractMojo {
 		try {
 			MyMojo mojo = new MyMojo();
 			mojo.execute();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void setRuntimeClasspath() {
+
+		List<String> runtimeClasspathElements = null;
+		try {
+//			// this doesn't work because I can't figure out how to load plugin descriptor
+//			this.descriptor = (PluginDescriptor) getPluginContext().get("descriptor");
+//			if(descriptor == null){
+//	        	getLog().error("maven is too complicated ;-)");
+//	        }
+//			List<String> runtimeClasspath = project.getRuntimeClasspathElements();
+//			List<String> newPluginClasspath = new ArrayList<String>();
+//            newPluginClasspath.addAll(runtimeClasspath);
+            //newPluginClasspath.addAll(providedClasspath);
+            //newPluginClasspath.addAll(generatedClasspath);
+
+//            extendPluginClasspath(newPluginClasspath);
+//			runtimeClasspathElements = project.getRuntimeClasspathElements();
+//			ClassRealm realm = descriptor.getClassRealm();
+//
+//			for (String element : runtimeClasspathElements)
+//			{
+//			    File elementFile = new File(element);
+//			    getLog().error("Found dependency: "+ elementFile.getName());
+//			    Thread.currentThread().setContextClassLoader(realm.getClassLoader());
+//			    //realm.addConstituent(elementFile.toURI().toURL());
+//			}
+			
+			//here's an attempt to build a new classworld and inject the runtime jars programmatically
+			//create a new classloading space
+	        ClassWorld world = new ClassWorld();
+
+	        //use the existing ContextClassLoader in a realm of the classloading space
+	        ClassRealm realm = world.newRealm("plugin.jetty.container", Thread.currentThread().getContextClassLoader());
+	         
+	        //create another realm for just the jars we have downloaded on-the-fly and make
+	        //sure it is in a child-parent relationship with the current ContextClassLoader
+	        //ClassRealm runtimeRealm = realm.createChildRealm("runtime");
+	        
+			runtimeClasspathElements = project.getRuntimeClasspathElements();
+			//URL[] runtimeUrls = new URL[runtimeClasspathElements.size()];
+			for (int i = 0; i < runtimeClasspathElements.size(); i++) {
+				String element = (String) runtimeClasspathElements.get(i);
+				getLog().error("Found dependency: "+ element);
+				//runtimeUrls[i] = new File(element).toURI().toURL();
+				realm.addConstituent(new File(element).toURI().toURL());
+			}
+
+	       //make the child realm the ContextClassLoader
+	       Thread.currentThread().setContextClassLoader(realm.getClassLoader());
+			
+			// URLClassLoader newLoader = new URLClassLoader(runtimeUrls,
+			// Thread.currentThread().getContextClassLoader());
+			//
+			// Class bundle = newLoader.loadClass("package.MyClass");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -98,7 +169,7 @@ public class MyMojo extends AbstractMojo {
 			e.printStackTrace();
 		} finally {
 			try {
-				if(out != null)
+				if (out != null)
 					out.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -106,7 +177,8 @@ public class MyMojo extends AbstractMojo {
 		}
 	}
 
-    public void runWithJetty() throws Exception {
+	public void runWithJetty() throws Exception {
+
         int port = Integer.getInteger("jetty.port", 9000).intValue();
         Server server = new Server();
 
@@ -124,7 +196,6 @@ public class MyMojo extends AbstractMojo {
 
         server.start();
         server.join();
-        log.info("JavaBrowser Server started on port "+port+", have fun!");
+        getLog().info("JavaBrowser Server started on port "+port+", have fun!");
     }
-
 }

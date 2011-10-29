@@ -441,34 +441,6 @@ li {
 }
 
 /* JavaDoc styles */
-#class-overview {
-  margin-bottom: 2em;
-  line-height: 2em;
-}
-
-#short-class-name {
-  font-size: 3em;
-  margin-bottom: 0.3em;
-}
-
-#class-hierarchy {
-  line-height: 1.2em;
-}
-
-#class-details {
-  margin-bottom: 2em;
-}
-
-#class-constructors {
-  line-height: 2em;
-  margin-bottom: 2em;
-}
-
-#class-methods {
-  line-height: 2em;
-  margin-bottom: 2em;
-}
-
 .hidden {
   display: none;
 }
@@ -505,7 +477,7 @@ li {
 
 #jars a.selected {
   text-decoration: underline;
-  background-image: url('../images/link_icons/accept.png?1319833166');
+  background-image: url('../images/link_icons/accept.png?1319833508');
   padding: 0px 22px;
   margin: -2px 0;
   background-repeat: no-repeat;
@@ -524,4 +496,8 @@ li {
 }
 #jars a.selected:active {
   color: #033649;
+}
+
+#classes #loading-wrap {
+  height: 30px;
 }

@@ -195,8 +195,8 @@ projects like this:
            <artifactId>javabrowser-maven-plugin</artifactId>
            <version>x.x.x</version>
          </plugin>
-       </plugin>
-       ...
+         ...
+       </plugins>
       </build>
 
 Then use `mvn javabrowser:start`
@@ -215,13 +215,16 @@ Then use `mvn javabrowser:start`
 
 ## Version 0.0.3 (in progress)
 
+* Figured out how to use requiresDependencyResolution to include
+  project's depenendencys inside the custom mojo. 
+
 * Added more features for parsing maven pom.xml such as ability to
 replace property tokens
 
 * Converted jquery to clojurescript
 
 * Changed UI to use combo box to select jars, then changed back to use
-  list. Learned a lot about google clojure widgets ;-)
+  list. Learned a lot about google closure widgets ;-)
 
 * Fixed relative file path so it works in prod jar and in lein ring
   server (sort of)

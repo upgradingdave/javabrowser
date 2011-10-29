@@ -31,3 +31,7 @@
   (let [classname "org.apache.log4j.varia.HUPNode"]
     (is (> (count (get-java-methods classname)) 0))))
 
+(deftest test-constructors
+  (let [classname "org.apache.log4j.varia.HUPNode"]
+    (is (> (count (get-java-constructors classname)) 0))))
+
