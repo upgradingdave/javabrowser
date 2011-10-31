@@ -197,10 +197,10 @@
   ;;      (html [:div (str request)]))
   ;; files serves static files from directory defined by root
   ;; for dev: 
-  (route/files "/" {:root "resources/public"})
+  ;;(route/files "/" {:root "resources/public"})
 
   ;;for prod
-  ;;(route/files "/" {:root "target/javabrowser-tmp/webapp"})
+  (route/files "/" {:root "target/javabrowser-tmp/webapp"})
 
   ;; resources serves static files out of classpath
   ;;(route/resources "/" {:root ""})
