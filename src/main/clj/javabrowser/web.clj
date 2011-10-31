@@ -146,8 +146,8 @@
       [:h2 {:id "class-short-name"} (fqn-to-short-class-name classname)]
       (if interfaces
         [:div {:id "class-implements"}
-         (str "Implements " (apply str (interpose ", " interfaces)))])
-      ]
+         (str "Implements " (apply str (interpose ", " interfaces)))]
+        [:span {:id "class-implements"} ""])]
      [:a {:id "constructors" :name "constructors"}]
      [:div {:id "class-constructors"}
       [:h2 "Constructors"]
