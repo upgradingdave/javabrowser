@@ -53,17 +53,10 @@ public class MyMojo extends AbstractMojo {
 	 * @readonly
 	 */
 	private MavenProject project;
-
-	/**
-     * The plugin descriptor
-     * 
-     * @parameter default-value="${descriptor}"
-     */
-    private PluginDescriptor descriptor;
 	
 	public void execute() throws MojoExecutionException {
 		try {
-			getLog().debug("Attempting to start javabrowser");
+			getLog().info("Attempting to start javabrowser");
 			setRuntimeClasspath();
 			moveWar();
 			runWithJetty();
@@ -87,56 +80,19 @@ public class MyMojo extends AbstractMojo {
 
 		List<String> runtimeClasspathElements = null;
 		try {
-//			// this doesn't work because I can't figure out how to load plugin descriptor
-//			this.descriptor = (PluginDescriptor) getPluginContext().get("descriptor");
-//			if(descriptor == null){
-//	        	getLog().error("maven is too complicated ;-)");
-//	        }
-//			List<String> runtimeClasspath = project.getRuntimeClasspathElements();
-//			List<String> newPluginClasspath = new ArrayList<String>();
-//            newPluginClasspath.addAll(runtimeClasspath);
-            //newPluginClasspath.addAll(providedClasspath);
-            //newPluginClasspath.addAll(generatedClasspath);
-
-//            extendPluginClasspath(newPluginClasspath);
-//			runtimeClasspathElements = project.getRuntimeClasspathElements();
-//			ClassRealm realm = descriptor.getClassRealm();
-//
-//			for (String element : runtimeClasspathElements)
-//			{
-//			    File elementFile = new File(element);
-//			    getLog().error("Found dependency: "+ elementFile.getName());
-//			    Thread.currentThread().setContextClassLoader(realm.getClassLoader());
-//			    //realm.addConstituent(elementFile.toURI().toURL());
-//			}
-			
-			//here's an attempt to build a new classworld and inject the runtime jars programmatically
-			//create a new classloading space
-	        ClassWorld world = new ClassWorld();
-
-	        //use the existing ContextClassLoader in a realm of the classloading space
-	        ClassRealm realm = world.newRealm("plugin.jetty.container", Thread.currentThread().getContextClassLoader());
-	         
-	        //create another realm for just the jars we have downloaded on-the-fly and make
-	        //sure it is in a child-parent relationship with the current ContextClassLoader
-	        //ClassRealm runtimeRealm = realm.createChildRealm("runtime");
-	        
+			//build a new classworld and inject the runtime jars programmatically
+			ClassWorld world = new ClassWorld();
+	        ClassRealm realm = world.newRealm("javabrowser", Thread.currentThread().getContextClassLoader());
 			runtimeClasspathElements = project.getRuntimeClasspathElements();
-			//URL[] runtimeUrls = new URL[runtimeClasspathElements.size()];
 			for (int i = 0; i < runtimeClasspathElements.size(); i++) {
 				String element = (String) runtimeClasspathElements.get(i);
-				getLog().error("Found dependency: "+ element);
-				//runtimeUrls[i] = new File(element).toURI().toURL();
+				getLog().debug("Javabrowser is adding "+ element + " to classloader.");
 				realm.addConstituent(new File(element).toURI().toURL());
 			}
 
 	       //make the child realm the ContextClassLoader
 	       Thread.currentThread().setContextClassLoader(realm.getClassLoader());
-			
-			// URLClassLoader newLoader = new URLClassLoader(runtimeUrls,
-			// Thread.currentThread().getContextClassLoader());
-			//
-			// Class bundle = newLoader.loadClass("package.MyClass");
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -7,7 +7,6 @@
 
 (deftest test-finding-jars
   (is (> (count (get-jars)) 0) "Find some jars")
-  (is (> (count (get-jars-on-classpath)) 0) "Find jars on classpath")
   (is (> (count (search-jars "clojure")) 0) "Do jar search"))
 
 (deftest test-looking-inside-jar
@@ -34,4 +33,16 @@
 (deftest test-constructors
   (let [classname "org.apache.log4j.varia.HUPNode"]
     (is (> (count (get-java-constructors classname)) 0))))
+
+(deftest test-class-meta
+  (let [classname "java.util.HashMap"
+        short-name (fqn-to-short-class-name classname)
+        package (fqn-to-package-name classname)
+        modifiers (get-class-modifiers classname)
+        type (get-class-type-params classname)
+        interfaces (get-class-interfaces classname)]
+    (is (= "public HashMap implements java.util.Map<K, V>, interface java.lang.Cloneable, interface java.io.Serializable"
+           (str package modifiers " " short-name " implements "
+                (apply str (interpose ", " (map #(format "%s" %)
+                                                interfaces))))) "Basic Class info")))
 

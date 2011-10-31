@@ -3,13 +3,16 @@
     #jars
       %h1 
         Jars
+      .loading-wrap
+        %div.loading{:class => "hidden"}
+          %img{:src => '/images/ajax-loader.gif'}
       %ul.list
         %li.jar-name
   #col2
     #classes
       %h1 
         Classes
-      #loading-wrap
+      .loading-wrap
         %div.loading{:class => "hidden"}
           %img{:src => '/images/ajax-loader.gif'}
       .searchbox
@@ -17,203 +20,12 @@
       %ul.list
         %li.class-name
   #col3
-    %h1 
-      Class Detail
-    #class-nav
-      %a{:href => "#summary"}
-        declaration
-      &nbsp;|&nbsp;
-      %a{:href => "#constructors"}
-        constructors
-      &nbsp;|&nbsp;
-      %a{:href => "#methods"}
-        methods
-    %a{:id => "summary", :name => "summary"}
-    #class-overview
-      #package-name
-        java.lang
-      %h2.short-class-name
-        String
-      #class-hierarchy  
-        .parent-class
-          java.lang.Object
-        #full-class-name  
-          \--> java.lang.String
-
-    #class-details
-      #class-def
-        public final class String 
-      #class-extends
-        extends Object 
-      #class-implements
-        implements Serializable, CharSequence, Comparable<String>
-
-    %a{:id => "constructors", :name => "constructors"}
-    #class-constructors
-      %h2
-        Constructors
-      .constructor
-        String()
-      .constructor  
-        String(byte[] bytes)
-      .constructor  
-        String(byte[] bytes, Charset charset)
-      .constructor  
-        String(byte[] ascii, int hibyte)
-      .constructor  
-        String(byte[] bytes, int offset, int length)
-      .constructor  
-        String(byte[] bytes, int offset, int length, Charset charset)
-      .constructor  
-        String(byte[] ascii, int hibyte, int offset, int count)
-      .constructor  
-        String(byte[] bytes, int offset, int length, String charsetName)
-      .constructor  
-        String(byte[] bytes, String charsetName)
-      .constructor  
-        String(char[] value)
-      .constructor  
-        String(char[] value, int offset, int count)
-      .constructor  
-        String(int[] codePoints, int offset, int count)
-      .constructor  
-        String(String original)
-      .constructor  
-        String(StringBuffer buffer)
-      .constructor  
-        String(StringBuilder builder)
-    %a{:id => "methods", :name => "methods"}
-    #class-methods
-      %h2
-        Methods
-      .method
-        char 	charAt(int index)
-      .method  
-        int 	codePointAt(int index)
-      .method  
-        int 	codePointBefore(int index)
-      .method  
-        int 	codePointCount(int beginIndex, int endIndex)
-      .method  
-        int 	compareTo(String anotherString)
-      .method  
-        int 	compareToIgnoreCase(String str)
-      .method  
-        String 	concat(String str)
-      .method  
-        boolean 	contains(CharSequence s)
-      .method  
-        boolean 	contentEquals(CharSequence cs)
-      .method  
-        boolean 	contentEquals(StringBuffer sb)
-      .method  
-        static String 	copyValueOf(char[] data)
-      .method  
-        static String 	copyValueOf(char[] data, int offset, int count)
-      .method  
-        boolean 	endsWith(String suffix)
-      .method  
-        boolean 	equals(Object anObject)
-      .method  
-        boolean 	equalsIgnoreCase(String anotherString)
-      .method  
-        static String 	format(Locale l, String format, Object... args)
-      .method  
-        static String 	format(String format, Object... args)
-      .method  
-        byte[] 	getBytes()
-      .method  
-        byte[] 	getBytes(Charset charset)
-      .method  
-        void 	getBytes(int srcBegin, int srcEnd, byte[] dst, int dstBegin)
-      .method  
-        byte[] 	getBytes(String charsetName)
-      .method  
-        void 	getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin)
-      .method  
-        int 	hashCode()
-      .method  
-        int 	indexOf(int ch)
-      .method  
-        int 	indexOf(int ch, int fromIndex)
-      .method  
-        int 	indexOf(String str)
-      .method  
-        int 	indexOf(String str, int fromIndex)
-      .method  
-        String 	intern()
-      .method  
-        boolean 	isEmpty()
-      .method  
-        int 	lastIndexOf(int ch)
-      .method  
-        int 	lastIndexOf(int ch, int fromIndex)
-      .method  
-        int 	lastIndexOf(String str)
-      .method  
-        int 	lastIndexOf(String str, int fromIndex)
-      .method  
-        int 	length()
-      .method  
-        boolean 	matches(String regex)
-      .method  
-        int 	offsetByCodePoints(int index, int codePointOffset)
-      .method  
-      .method  
-        Tests if two string regions are equal.
-      .method  
-        Tests if two string regions are equal.
-      .method  
-      .method  
-        String 	replace(CharSequence target, CharSequence replacement)
-      .method  
-        String 	replaceAll(String regex, String replacement)
-      .method  
-        String 	replaceFirst(String regex, String replacement)
-      .method  
-        String[] 	split(String regex)
-      .method  
-        String[] 	split(String regex, int limit)
-      .method  
-        boolean 	startsWith(String prefix)
-      .method  
-        boolean 	startsWith(String prefix, int toffset)
-      .method  
-        CharSequence 	subSequence(int beginIndex, int endIndex)
-      .method  
-        String 	substring(int beginIndex)
-      .method  
-        String 	substring(int beginIndex, int endIndex)
-      .method  
-        char[] 	toCharArray()
-      .method  
-        String 	toLowerCase()
-      .method  
-        String 	toLowerCase(Locale locale)
-      .method  
-        String 	toString()
-      .method  
-        String 	toUpperCase()
-      .method  
-        String 	toUpperCase(Locale locale)
-      .method  
-        String 	trim()
-      .method  
-        static String 	valueOf(boolean b)
-      .method  
-        static String 	valueOf(char c)
-      .method  
-        static String 	valueOf(char[] data)
-      .method  
-        static String 	valueOf(char[] data, int offset, int count)
-      .method  
-        static String 	valueOf(double d)
-      .method  
-        static String 	valueOf(float f)
-      .method  
-        static String 	valueOf(int i)
-      .method  
-        static String 	valueOf(long l)
-      .method  
-        static String 	valueOf(Object obj)
+    #classdetail
+      %h1 
+        Class Detail
+      .loading-wrap
+        %div.loading{:class => "hidden"}
+          %img{:src => '/images/ajax-loader.gif'}
+      %div
+        Please choose a class to see details
 

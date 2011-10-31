@@ -9,7 +9,7 @@
 (defn get-jars-on-classpath
   "Gets a list of abs paths to jars on the classpath"
   []
-  (filter
+  (filter 
    #(re-matches #".*\.jar" %)
    (concat (str/split (. System (getProperty "sun.boot.class.path")) #":")
            (str/split (. System (getProperty "java.class.path")) #":"))))
@@ -56,6 +56,16 @@ map, it complains that z is closed"
 qualified java class name"
   (str/replace (nth (re-matches #"(.*)\.class" filepath) 1) "/" "."))
 
+(defn fqn-to-short-class-name
+  "Grab class name off of fqn"
+  [fqn]
+  (apply str (drop (+ 1 (. fqn (lastIndexOf "."))) fqn)))
+
+(defn fqn-to-package-name
+  "Grab package from fqn"
+  [fqn]
+  (apply str (take (. fqn (lastIndexOf ".")) fqn)))
+
 ;; Deprecated in favor of using maven pom.xml
 ;; (defn find-classes
 ;;   "TODO: WIP. Attempts to find names of all classes on classpath. First, find names of classes in all the jar files on the classpath"
@@ -83,33 +93,28 @@ qualified java class name"
     (.. Class (forName classname))
     (catch ClassNotFoundException _ nil)))
 
-(defn get-class-modifiers
-  "Given a Class return string of Modifiers (like public static etc)"
-  [aclass]
+;; TODO: I'm sure there's a way to clean this up, maybe with protocols?
+(defmulti get-class-modifiers
+  "Get list of class modifiers such as 'public static'" class)
+(defmethod get-class-modifiers :default [aclass]
   (.. Modifier (toString (.getModifiers aclass))))
+(defmethod get-class-modifiers String [s]
+  (get-class-modifiers (.. Class (forName s))))
 
-(defn get-class-type-params
-  "Given a class return list of TypeParameters"
-  [aclass]
-  (seq (.. aclass (getTypeParameters))))
-
-(defn format-class-type-params
-  "Given list of TypeParams, produce nicely formatted string"
-  [coll]
-  (apply str (interpose "," (map #(format "%s" %) coll))))
-
-(defn get-class-interfaces
+(defmulti get-class-interfaces
   "Given a class return list of implemented Interfaces"
-  [aclass]
-  (seq (.. aclass (getGenericInterfaces))))
+  class)
+(defmethod get-class-interfaces :default [aclass]
+    (seq (.. aclass (getGenericInterfaces))))
+(defmethod get-class-interfaces String [s]
+  (get-class-interfaces (.. Class (forName s))))
 
-(defn format-class-interfaces
-  "Given a list of Type interfaces, produce nicely formatted string"
-  [coll]
-  (apply str (interpose ", " (map
-                              #(html
-                                [:a {:href (format "methods?classname=%s" %)}
-                                 (format "%s" %)]) coll))))
+;; TODO: need to revisit
+(defmulti get-class-type-params class)
+(defmethod get-class-type-params :default [aclass]
+  (seq (.. aclass (getTypeParameters))))
+(defmethod get-class-type-params String [s]
+  (get-class-type-params (.. Class (forName s))))
 
 ;; Get metadata about Java Methods
 (defn get-java-methods

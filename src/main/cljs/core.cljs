@@ -94,11 +94,13 @@
 (defn get-list-of-jars
   [search]
   (let [search (if (empty? search) ".*" search)]
-    (util/request
-     (str "/rest/jars?search=" search)
-     (fn [response]
-       (update-list-of-jars (util/parse-response response))
-       (get-list-of-classes-in-jars (:selected-jars @state))))))
+    (do
+      (classes/remove (util/get-element "#jars .loading") "hidden")
+      (util/request
+       (str "/rest/jars?search=" search)
+       (fn [response]
+         (update-list-of-jars (util/parse-response response))
+         (get-list-of-classes-in-jars (:selected-jars @state)))))))
 
 (defn on-click-jar
   "When user clicks jar, add or remove from selected list, update css,
@@ -121,7 +123,8 @@
        elemid
        (util/trunc-string (util/get-file-name item) 25)
        {:onclick on-click-jar :data item :classes "selected"})
-      (toggle-selected-jar item))))
+      (toggle-selected-jar item))
+    (classes/add (util/get-element "#jars .loading") "hidden")))
 
 ;; manage list of classes 
 (defn get-list-of-classes-in-jars
@@ -161,9 +164,11 @@
 ;; Manage Class details
 (defn get-class-details
   [classname]
-  (util/request
-   (str "/rest/classdetail?classname=" classname)
-   (fn [response] (update-class-detail (util/parse-response response)))))
+  (do
+    (classes/remove (util/get-element "#classdetail .loading") "hidden")
+    (util/request
+     (str "/rest/classdetail?classname=" classname)
+     (fn [response] (update-class-detail (util/parse-response response))))))
 
 (defn update-class-detail
   [response]

@@ -477,7 +477,7 @@ li {
 
 #jars a.selected {
   text-decoration: underline;
-  background-image: url('../images/link_icons/accept.png?1319833508');
+  background-image: url('../images/link_icons/accept.png?1319844842');
   padding: 0px 22px;
   margin: -2px 0;
   background-repeat: no-repeat;
@@ -498,6 +498,6 @@ li {
   color: #033649;
 }
 
-#classes #loading-wrap {
+.loading-wrap {
   height: 30px;
 }

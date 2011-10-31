@@ -111,25 +111,51 @@
                                       "(" (get-param-types %) ")"))
                     coll)))))
 
-(defn build-class-html
-  "Generate html to display metadata about a class"
-  [class-name]
-  (let [aclass (string-to-class class-name)]
-      (html [:div
-             [:div {:class "class-name"}
-              [:h1 (str (get-class-modifiers aclass) " " (.getName aclass))]]
-             (if (not (empty? (get-class-interfaces aclass)))
-               [:div {:class "class-interfaces"}
-                (str
-                 "implements "
-                 (format-class-interfaces (get-class-interfaces aclass)))]
-               )
-             ])))
+(defn java-constructors-html
+  "Build a structure that represents methods of a class"
+  [coll]
+  (vec
+   (cons :ul
+         (cons {:id "methods"}
+               (map #(vector :li (str (.. Modifier (toString (.getModifiers %)))
+                                      " " (.. % getName)
+                                      "(" (get-param-types %) ")"))
+                    coll)))))
 
-(defn content-html
+(defn loading-html []
+  [:div {:class "loading-wrap"}
+   [:div {:class "loading hidden"}
+    [:img {:src "/images/ajax-loader.gif"}]]])
+
+(defn classdetail-html
   "Render structure that represents details of a class"
   [& [classname]]
-  (str (java-methods-html (get-java-methods classname))))
+  (let [interfaces (get-class-interfaces classname)]
+    [:div {:id "classdetail"}
+     [:h1 "Class Detail"]
+     (loading-html)
+     [:div {:id "class-nav"}
+      [:a {:href "#declaration"} "declaration"]
+      [:span " | "]
+      [:a {:href "#constructors"} "constructors"]
+      [:span " | "]
+      [:a {:href "#methods"} "methods"]]
+     [:a {:id "declaration" :name "declaration"}]
+     [:div {:id "class-declaration"}
+      [:div {:id "package-modifiers"} (get-class-modifiers classname)]
+      [:h2 {:id "class-short-name"} (fqn-to-short-class-name classname)]
+      (if interfaces
+        [:div {:id "class-implements"}
+         (str "Implements " (apply str (interpose ", " interfaces)))])
+      ]
+     [:a {:id "constructors" :name "constructors"}]
+     [:div {:id "class-constructors"}
+      [:h2 "Constructors"]
+      (java-constructors-html (get-java-constructors classname))]
+     [:a {:id "methods" :name "methods"}]
+     [:div {:id "class-methods"}
+      [:h2 "Methods"]
+      (java-methods-html (get-java-methods classname))]]))
 
 (defn get-class-results
   "Takes comma delimitd list of JARS and returns first MAX classes
@@ -150,7 +176,7 @@
   ;; and return it
   (GET "/rest/classdetail" request
        (let [classname (:classname (parse-query-string (:query-string request)))]
-         (text-response (list (content-html classname)))))
+         (text-response (list (classdetail-html classname)))))
   (GET "/rest/jars" request
        (let [search-term (:search (parse-query-string (:query-string request)))
              jar-path (:jar (parse-query-string (:query-string request)))]
@@ -171,10 +197,10 @@
   ;;      (html [:div (str request)]))
   ;; files serves static files from directory defined by root
   ;; for dev: 
-  ;;(route/files "/" {:root "resources/public"})
+  (route/files "/" {:root "resources/public"})
 
   ;;for prod
-  (route/files "/" {:root "target/javabrowser-tmp/webapp"})
+  ;;(route/files "/" {:root "target/javabrowser-tmp/webapp"})
 
   ;; resources serves static files out of classpath
   ;;(route/resources "/" {:root ""})
