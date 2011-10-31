@@ -1,15 +1,15 @@
-This is a web project that I'm using to learn Clojure (and
-Clojurescript!). It's very alpha and, also, this code is pretty ugly.
+This is a web project that I wrote primarily to learn Clojure (and
+Clojurescript!). It's very alpha and so a little rough around the
+edges, but as I have time and/if there's any interest, I'd be happy to
+add more functionality.
 
-This is a web application to explore the classes that are available to
-a java project.
+Itch: You are working with Maven and would like a helpful view of
+all the jars and classes on your project's classpath.
 
-If the webapp is started from within a directory that is a maven
-project, it will use the pom to find jar dependencies. 
-
-Otherwise, it checks which jars are in this webapp's classpath (which
-really isn't very useful because it will only find the jars that are
-required to run itself classpath)
+Scratch: When this webapp is started from within a directory that is a
+maven project, it will use the pom to find jar dependencies and then
+display a nice web page that allows you to browse and search the
+classes that are being included the classpath by maven. 
 
 # Directory Layout
 
@@ -203,17 +203,19 @@ Then use `mvn javabrowser:start`
 
 # RoadMap
 
-## Version 0.0.5 (Not started yet)
+Ideas for future versions
+
+* Make all class and interface names in class details click thru links
+
+* Add ability to drill down into source code using maven capabilities
+
+* Add ability to toggle between runtime, test and provided scopes
 
 * Maybe make it a hosted webapp where (in addition to local maven
   plugin)? People could search for jars similar to findjars website
   and then have ability to search and inspect classes.
 
-## Version 0.0.4 (Not started yet)
-
-* Maybe add ability to drill down into source code using maven capabilities?
-
-## Version 0.0.3 (in progress)
+## Version 0.0.3 (Released Oct 31 2011)
 
 * Figured out how to use requiresDependencyResolution to include
   project's depenendencys inside the custom mojo. 
