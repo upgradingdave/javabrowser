@@ -7,6 +7,16 @@
   <version>0.0.3</version>
   <name>javabrowser-maven-plugin</name>
   <url>http://upgradingdave.com</url>
+  <distributionManagement>
+    <repository>
+      <id>upgradingdave-repo</id>
+      <url>scpexe://dev.upgradingdave.com/home/dparoulek/maven/repo</url>
+    </repository>
+    <site>
+      <id>upgradingdave-docs</id>
+      <url>scpexe://dev.upgradingdave.com/home/dparoulek/maven/docs</url>
+    </site>
+  </distributionManagement>
   <repositories>
     <repository>
       <id>upgradingdave-repo</id>

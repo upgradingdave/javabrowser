@@ -11,6 +11,10 @@ maven project, it will use the pom to find jar dependencies and then
 display a nice web page that allows you to browse and search the
 classes that are being included the classpath by maven. 
 
+Watch a 3 minute video of how to use inside you're maven project: 
+
+http://www.screencast.com/t/CSXMSpCDR2i
+
 # Directory Layout
 
 * src/main/clj 
